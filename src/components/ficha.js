@@ -2,8 +2,9 @@ import React from 'react'
 import './ficha.css'
 
 
-const Ficha = () => {
-	return <div className="ficha">A</div>
+
+const Ficha = (props) => {
+	return <div className="ficha" id={props.fichaId} >{props.label}</div>
 }
 
 
