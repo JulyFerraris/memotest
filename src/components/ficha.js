@@ -4,7 +4,7 @@ import './ficha.css'
 
 
 const Ficha = (props) => {
-	return <div className="ficha" id={props.fichaId} >{props.label}</div>
+	return <div className="ficha">{props.label}</div>
 }
 
 
