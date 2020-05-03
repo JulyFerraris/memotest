@@ -11,19 +11,20 @@ class Tablero extends React.Component {
 	constructor(props) {
     	super(props);
     	this.state = {
-      	tablero: [['A','B','A','C'],['D','D','B','C']],
+      	tablero: [['A','B','A','F'],['D','D','B','C'],['E','F','C','E']],
+      	paresEncontrados: [['D','D'],['A','A']]
     	};
   	}
 
 	render(){
 		return <div className="tablero">
 			{ 
-				this.state.tablero.map(function(row, index) {
+				this.state.tablero.map(function(row, x) {
   					return (
-  						<div className="tablero-row" key={index}>
+  						<div className="tablero-row" key={x}>
 		  					{ 
-		  						row.map(function(card, index) {
-		    						return <Ficha label={card} key={index}/>;
+		  						row.map(function(card, y, visibility) {
+		    						return <Ficha cardLabel={card} Key={y} cardVisibility={visibility} />;
 		  						})
 		  					}
 	  					</div>
