@@ -21,19 +21,19 @@ class Ficha extends React.Component {
   constructor(props) {
     super(props);
     this._cardClicked = this._cardClicked.bind(this);
-    this.state = {isVisible: false}
+    //this.state = {isVisible: false}
   }
 
   _cardClicked() {
-   // alert(this.props.cardLabel)
-    this.setState({isVisible: true})
+   alert(this.props.cardLabel)
+    //this.setState({isVisible: true})
   }
 
   render(){
-    const isVisible = this.state.isVisible;
+    //const isVisible = this.state.isVisible;
 
     return <div onClick={this._cardClicked} className="ficha"> 
-      {isVisible ? this.props.cardLabel : '?' }
+      {this.props.isVisible ? this.props.cardLabel : '?' }
     </div>
   }
 }
