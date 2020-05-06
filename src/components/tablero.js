@@ -23,8 +23,8 @@ class Tablero extends React.Component {
   					return (
   						<div className="tablero-row" key={x}>
 		  					{ 
-		  						row.map(function(card, y, visibility) {
-		    						return <Ficha cardLabel={card} Key={y} cardVisibility={visibility} />;
+		  						row.map(function(card, y) {
+		    						return <Ficha cardLabel={card} key={y} />;
 		  						})
 		  					}
 	  					</div>

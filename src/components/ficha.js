@@ -18,27 +18,27 @@ import './ficha.css'
 
 class Ficha extends React.Component {   
 
-   constructor(props) {
-    	super(props);
-    	this._cardClicked = this._cardClicked.bind(this);
-    	//this.state = {cardHide: true}
-  	}
+  constructor(props) {
+    super(props);
+    this._cardClicked = this._cardClicked.bind(this);
+    this.state = {isVisible: false}
+  }
 
+  _cardClicked() {
+   // alert(this.props.cardLabel)
+    this.setState({isVisible: true})
+  }
 
-  	_cardClicked() {
-    	alert(this.props.cardLabel)
-    	//this.setState({cardHide: false})
-  	}
+  render(){
+    const isVisible = this.state.isVisible;
 
-  	
-
-  	render(){
-  		/*if(this.state.cardHide === true) {
-  			return <div onClick={this._cardClicked} className="ficha"> ? </div>
-  		}*/
-		return <div onClick={this._cardClicked} className="ficha" cardVisibility={this.props.cardVisibility} > {this.props.cardLabel} </div>
-	}
+    return <div onClick={this._cardClicked} className="ficha"> 
+      {isVisible ? this.props.cardLabel : '?' }
+    </div>
+  }
 }
 
 export default Ficha
+
+
 
