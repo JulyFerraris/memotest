@@ -14,13 +14,27 @@ class Tablero extends React.Component {
     	};
   	}
 
+
+
    _clickEnFicha = (coorX,coorY) => {
-	  	//console.log("coordenada " + coorX + "-" + coorY )
+		let clickeada = false;
+		
       this.setState({
-			fichasClickeadas: [ ...this.state.fichasClickeadas, [coorX,coorY ]]
+			fichasClickeadas: [ ...this.state.fichasClickeadas, [coorX, coorY]]
+		}, () => console.log("clickeadas", this.state.fichasClickeadas) )
+		
+		/* for(var i = 0; i < this.state.fichasClickeadas.length; i++){
+			if(this.state.fichasClickeadas[i][0] === coorX && this.state.fichasClickeadas[i][1] === coorY){
+				clickeada = true;
+			}
+		} */
+
+		this.state.fichasClickeadas.forEach((arrayItems) => {
+			arrayItems[0] === coorX && arrayItems[1] === coorY ? clickeada= true : clickeada= false
 		})
-		console.log("clickeadas", this.state.fichasClickeadas)
-   }
+		console.log(clickeada)
+	}
+
 
 	render(){
 		return <div className="tablero">
@@ -35,6 +49,7 @@ class Tablero extends React.Component {
 										key={y} 
 										isVisible={false}
 										coordenadas={() => this._clickEnFicha(x, y)}
+										fueClickeada={() =>this._repetida(x, y) }
                            />;		    						
 								})
 		  					}
