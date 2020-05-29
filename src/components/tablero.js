@@ -10,8 +10,7 @@ class Tablero extends React.Component {
     	super(props);
     	this.state = {
          tablero: [['A','B','A','F'],['D','D','B','C'],['E','F','C','E']],
-			fichasClickeadas: [],
-			isVisible: false
+         fichasClickeadas: []
     	};
   	}
 
@@ -21,17 +20,25 @@ class Tablero extends React.Component {
 		let clickeada = false;
 		
       this.setState({
-			fichasClickeadas: [ ...this.state.fichasClickeadas, [coorX, coorY]],
-			isVisible: true,
-		}, () => console.log("clickeadas", this.state.fichasClickeadas))
-
+			fichasClickeadas: [ ...this.state.fichasClickeadas, [coorX, coorY]]
+		}, () => console.log("clickeadas", this.state.fichasClickeadas) )
+	
 		this.state.fichasClickeadas.forEach((arrayItems) => {
 			arrayItems[0] === coorX && arrayItems[1] === coorY ? clickeada= true : clickeada= false
 		})
 		console.log(clickeada)
 	}
 
-	
+
+	_wasClicked = (coorX, coorY) => {
+		for(let i = 0; i < this.state.fichasClickeadas.length; i++){
+			if (this.state.fichasClickeadas[i][0] === coorX && this.state.fichasClickeadas[i][1] === coorY){
+				return true
+			}
+			return false
+		}
+  	}
+
 
 	render(){
 		return <div className="tablero">
@@ -44,7 +51,7 @@ class Tablero extends React.Component {
                            return <Ficha 
 										cardLabel={card} 
 										key={y} 
-										isVisible={this.state.isVisible}
+										isVisible={this._wasClicked(x, y)} 
 										coordenadas={() => this._clickEnFicha(x, y)}
                            />;		    						
 								})
@@ -58,4 +65,3 @@ class Tablero extends React.Component {
 }
 
 export default Tablero
-
