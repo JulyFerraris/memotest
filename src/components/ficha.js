@@ -13,11 +13,14 @@ class Ficha extends React.Component {
 
   	_cardClicked = () => {
 		this.props.coordenadas()
-		alert(this.props.cardLabel)
+		//alert(this.props.cardLabel)
 	}
   
   	render(){
-		return <div className="ficha" onClick={this._cardClicked} > 
+		  
+		const active = this.props.isVisible ? 'ficha active' : 'ficha';
+
+		return <div className={active} onClick={this._cardClicked} > 
       	{this.props.isVisible ? this.props.cardLabel : '?' }
     	</div>
  	}

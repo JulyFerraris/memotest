@@ -1,5 +1,6 @@
 .ficha {
-	background-color: white;
+	background-color: rebeccapurple;
+	color: white;
 	border-radius: 5px;
 	box-sizing: border-box;
 	display: inline-block;
@@ -7,4 +8,12 @@
 	margin: 10px;
 	min-width: 55px;
 	padding: 20px;
+	cursor: pointer;
+}
+
+
+.active {
+	background-color: white;
+	color: black;
+	cursor: default;
 }
