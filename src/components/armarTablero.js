@@ -37,9 +37,6 @@ class ArmarTablero extends React.Component {
       }, () => console.log("state.fichasSeleccionadas1:", this.state.fichasSeleccionadas))
    }
    
-
-   
-
    _armoGrilla = (filas, columnas) => {
       console.log("state.fichasSeleccionadas2:",this.state.fichasSeleccionadas)
       console.log("state.fichasSeleccionadas2 length:",this.state.fichasSeleccionadas.length)
