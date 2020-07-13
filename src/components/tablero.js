@@ -5,6 +5,10 @@ import Ficha from '../components/ficha'
 import Contador from '../components/contador'
 import { fichas, armarTablero} from '../utils/logica'
 
+
+const filas = 2
+const columnas = 3
+
 class Tablero extends React.Component {
    
    constructor(props) {
@@ -14,13 +18,15 @@ class Tablero extends React.Component {
 			posiblePar: [],
 			paresEncontrados: [],
 			intentos: 0,
+			juegoGanado: false
     	};
 	}
-	  
 
+	
 	_generarTablero = () => {
-		let miTablero= armarTablero(fichas,4,3)
-		this.setState({ tablero: miTablero})
+		this.setState({ 
+			tablero: armarTablero(fichas,filas,columnas)
+		})
 	}
 
 	componentDidMount() {
@@ -33,7 +39,7 @@ class Tablero extends React.Component {
 				//guardo la primer ficha  en "posiblePar"
 				this.setState({
 					posiblePar: [ ...this.state.posiblePar, [coorX, coorY]],
-				}, () => console.log('ficha1:', this.state.posiblePar))
+				})
 				break;
 			case 1:
 				// si entra acá es porque ya seleccionó 2 fichas
@@ -42,12 +48,12 @@ class Tablero extends React.Component {
 				// si no la había elegido antes la agrego a posiblePar
 				this.setState({
 					posiblePar: [ ...this.state.posiblePar, [coorX, coorY]],
-				}, () => console.log('ficha1 y 2:', this.state.posiblePar))	
+				})	
 				// y si son pares las guardo en "paresEncontrados"
 				if(this._sonPares(coorX, coorY,coorX2,coorY2)) {
 					this.setState({
 						paresEncontrados: [...this.state.paresEncontrados,[coorX,coorY],[coorX2,coorY2] ]
-						}, () => console.log("encontrados", this.state.paresEncontrados)
+						}, () => this._ganarJuego() 
 					)
 				}
 				// actualizo la cantidad de intentos
@@ -58,7 +64,7 @@ class Tablero extends React.Component {
 				// saco de "posiblePar" las fichas de la jugada anterior y dejo la seleccionada
 				this.setState({
 					posiblePar: [[coorX, coorY]]
-				}, () => console.log('ficha1:', this.state.posiblePar))
+				})
 				break;
 			default:
 				console.log('Ups, algo salió mal');
@@ -81,7 +87,6 @@ class Tablero extends React.Component {
 		return false
 	}
 
-
 	_sonPares = (coorX1, coorY1, coorX2, coorY2) => {
 		return (this.state.tablero[coorX1][coorY1] === this.state.tablero[coorX2][coorY2]) ? true : false
 	}
@@ -89,14 +94,31 @@ class Tablero extends React.Component {
 	_sumarIntentos = () => {
 		this.setState({
 			intentos: this.state.intentos + 1
-		}, () => console.log("intentos", this.state.intentos))
+		})
+	}
+
+	_ganarJuego = () => {
+		if(this.state.paresEncontrados.length === filas * columnas) {
+			this.setState({ juegoGanado: true })
+		}
+	}
+
+	_nuevoJuego = () => {
+		this.setState({
+			tablero: armarTablero(fichas,filas,columnas),
+			posiblePar: [],
+			paresEncontrados: [],
+			intentos: 0,
+			juegoGanado: false
+		})
 	}
 
 
 	render(){
 		return <React.Fragment>
-
+			
 			<div className="tablero">
+
 				{ 
 					this.state.tablero.map((row, x) => {
 						return (
@@ -105,7 +127,6 @@ class Tablero extends React.Component {
 									row.map( (card, y) => {
 										const isVisible = this._flipCard(x, y)
 										const yaElegida = () => {}
-
 										return <Ficha 
 											cardLabel={card} 
 											key={y} 
@@ -120,6 +141,14 @@ class Tablero extends React.Component {
 				}
 			</div>
 			<Contador intentos={this.state.intentos} />
+			
+			{this.state.juegoGanado ? 
+				<React.Fragment>
+      			<h2>¡Ganaste!</h2>
+      			<button onClick={this._nuevoJuego} >Nuevo Juego</button>
+				</React.Fragment> 
+			: null }
+		
 		</React.Fragment>
 	}
 }
