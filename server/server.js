@@ -12,4 +12,10 @@ app.get('/api/prueba', (req, res) => {
    })
 });
 
+app.get('/api/tablero', (req, res) => {
+   res.send({
+      tablero: [['A','B'],['C','B'],['C','A']]
+   })
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}`))
