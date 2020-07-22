@@ -34,20 +34,29 @@ let libros = [{ 'id': 0, 'name': 'Dracula'},{ 'id': 1, 'name': '1984'} ]
 
 
 app.get('/api/libros', (req, res) => {
-   res.send(libros)
+   return res.send(libros)
 });
 
 
 app.post('/api/libros', (req, res) => {
    let nombre_libro = req.body.name
-   libros.push({'id': libros.length, 'name': nombre_libro})
-   res.send(libros[libros.length - 1])
+   if(nombre_libro !== ""){
+      libros.push({'id': libros.length, 'name': nombre_libro})
+      return res.status(201).send(libros[libros.length - 1])
+   }
+   return res.status(401).send("el campo name es requerido")
 });
+
 
 
 app.get('/api/libros/:id', (req, res) => {
    const id = req.params.id
-   res.send(libros[id])
+   for( let i = 0; i < libros.length; i++){
+      if( libros[i].id == id ){
+         return res.status(200).send(libros[id])
+      } 
+   }
+   return res.status(404).send('El libro no existe')
 });
 
 
@@ -56,20 +65,26 @@ app.get('/api/libros/:id', (req, res) => {
 app.put('/api/libros/:id', (req, res) => {
    const id = req.params.id
    let nombre_libro = req.body.name
-   for( let i=0; i<libros.length; i++){
-      if( libros[i].id === id ){
-         libros[i].name = nombre_libro;
+   if( nombre_libro !== ""){
+      for( let i = 0; i < libros.length; i++){
+         if( libros[i].id == id ){
+            libros[i].name = nombre_libro;
+         }
       }
+      return res.status(200).send(libros[id])
+   } else {
+      return res.status(400).send("el campo name es requerido")
    }
-   res.send(libros[id])
 });
+
+
 
 app.delete('/api/libros/:id', (req, res) => {
    const id = req.params.id
-   for( let i=0; i<libros.length; i++){
-      if( libros[i].id === id ){
+   for( let i = 0; i < libros.length; i++){
+      if( libros[i].id == id ){
          libros.splice(i,1);
       }
    }
-   res.send(libros)
+   return res.status(200).send('El libro fué eliminado')
 });
