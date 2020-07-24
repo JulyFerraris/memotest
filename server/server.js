@@ -37,18 +37,6 @@ app.get('/api/libros', (req, res) => {
    return res.send(libros)
 });
 
-
-app.post('/api/libros', (req, res) => {
-   let nombre_libro = req.body.name
-   if(nombre_libro !== ""){
-      libros.push({'id': libros.length, 'name': nombre_libro})
-      return res.status(201).send(libros[libros.length - 1])
-   }
-   return res.status(401).send("el campo name es requerido")
-});
-
-
-
 app.get('/api/libros/:id', (req, res) => {
    const id = req.params.id
    for( let i = 0; i < libros.length; i++){
@@ -60,23 +48,32 @@ app.get('/api/libros/:id', (req, res) => {
 });
 
 
+app.post('/api/libros', (req, res) => {
+   let nombre_libro = req.body.name
+   if(nombre_libro !== ""){
+      libros.push({'id': libros.length, 'name': nombre_libro})
+      return res.status(201).send(libros[libros.length - 1])
+   }
+   return res.status(400).send("el campo name es requerido")
+});
+
 
 
 app.put('/api/libros/:id', (req, res) => {
    const id = req.params.id
    let nombre_libro = req.body.name
-   if( nombre_libro !== ""){
-      for( let i = 0; i < libros.length; i++){
-         if( libros[i].id == id ){
+   for( let i = 0; i < libros.length; i++){
+      if( libros[i].id == id) {
+         if(nombre_libro !== ""){
             libros[i].name = nombre_libro;
+            return res.status(200).send(libros[id])
+         } else {
+            return res.status(400).send("el campo name es requerido")
          }
       }
-      return res.status(200).send(libros[id])
-   } else {
-      return res.status(400).send("el campo name es requerido")
    }
+   return res.status(404).send('No se puede modificar porque el libro no existe')
 });
-
 
 
 app.delete('/api/libros/:id', (req, res) => {
@@ -84,7 +81,8 @@ app.delete('/api/libros/:id', (req, res) => {
    for( let i = 0; i < libros.length; i++){
       if( libros[i].id == id ){
          libros.splice(i,1);
-      }
+         return res.status(200).send('El libro fué eliminado')
+      } 
    }
-   return res.status(200).send('El libro fué eliminado')
+   return res.status(404).send('No se puede borrar porque el libro no existe')
 });
