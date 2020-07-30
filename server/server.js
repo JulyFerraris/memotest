@@ -6,7 +6,7 @@ const port = process.env.PORT || 5000
 app.use(express.json())
 
 app.get('/api/prueba', (req, res) => {
-   res.send({
+   return res.send({
       'mensaje': 'Saludos desde nuestro server !!',
       'hora': (new Date()).toISOString() 
    })
@@ -14,18 +14,72 @@ app.get('/api/prueba', (req, res) => {
 
 app.post('/api/prueba', (req, res) => {
    let contenido = req.body
-   res.send(contenido)
+   return res.send(contenido)
 });
 
 
-
 app.get('/api/tablero', (req, res) => {
-   res.send({
+   return res.send({
       tablero: [['A','B'],['C','B'],['C','A']]
    })
 });
 
+
+
+// armar tabero
+app.post('/api/tableros', (req, res) => {
+   let ancho = req.body.ancho
+   let alto = req.body.alto 
+
+   if (!ancho || !alto) return res.status(400).send('El ancho y el alto son obligatorios')
+   if ((ancho * alto) % 2 === 1) return res.status(400).send('La grilla debe contener cantidad par de celdas, modifique el ancho o el alto')
+   return res.status(201).send('tablero')
+
+});
+
+
+// pedir el contenido de una ficha
+app.get('/api/tableros/:taberoId', (req, res) => {
+   let posX = req.params.posx
+   let posY = req.params.posY
+   //let id = req.params.id
+
+   //if () return res.status(404).send("el tablero no existe")
+   if (!posX || !posY) return res.status(400).send('faltan datos para encontrar la ficha')
+   if (posX >= tablero.length || posY >= tablero[0].length) return res.status(400).send('Por favor ingrese coordenadas válidas')
+   
+   return res.status(200).send('contenido ficha') 
+
+});
+
+
+// mandarle al servidor un par de fichas para comparar
+app.post('/api/tableros/:tableroId', (req, res) => {
+   let ficha1 = req.body.ficha1
+   let ficha2 = req.body.ficha2
+
+   if (!ficha1 || !ficha2) return res.status(400).send('se necesitan 2 fichas para poder comparar')
+   if (tablero[ficha1[0]]>= tablero.length || tablero[ficha1[1]] >= tablero[0].length) return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 1')
+   if (tablero[ficha2[0]]>= tablero.length || tablero[ficha2[1]] >= tablero[0].length) return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 2') 
+
+   return res.status(201).send('son pares? true/false') 
+});
+
+/*
+//consultar el estado de la partida al servidor 
+app.get('/api/tableros/:tableroId/estado', (req, res) => {
+   let sigueJugando = true
+   if(tablero.length === paresEncontrados) {
+      return res.status(200).send(false)
+   } 
+   return res.status(404).send("el tablero no existe")
+});*/
+
+
 app.listen(port, () => console.log(`Listening on port ${port}`))
+
+
+
 
 
 
@@ -33,9 +87,14 @@ app.listen(port, () => console.log(`Listening on port ${port}`))
 let libros = [{ 'id': 0, 'name': 'Dracula'},{ 'id': 1, 'name': '1984'} ]
 
 
+
 app.get('/api/libros', (req, res) => {
-   return res.send(libros)
+   const nombre_libro = req.query.name
+   const libros_filtrados = nombre_libro ? libros.filter(i => i.name.startsWith(nombre_libro)) : libros
+   return res.send(libros_filtrados)
 });
+
+
 
 app.get('/api/libros/:id', (req, res) => {
    const id = req.params.id
