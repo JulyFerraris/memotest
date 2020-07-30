@@ -26,14 +26,44 @@ app.get('/api/tablero', (req, res) => {
 
 
 
+
 // armar tabero
 app.post('/api/tableros', (req, res) => {
    let ancho = req.body.ancho
    let alto = req.body.alto 
+   let fichas = [ 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+   let cantPares = (ancho * alto) / 2
+   let misFichas = [...fichas]
+   let misFichasElegidas = []
+   let miTablero = []
 
    if (!ancho || !alto) return res.status(400).send('El ancho y el alto son obligatorios')
    if ((ancho * alto) % 2 === 1) return res.status(400).send('La grilla debe contener cantidad par de celdas, modifique el ancho o el alto')
-   return res.status(201).send('tablero')
+   
+
+   for(let i = 0; i < cantPares; i++){
+      let indiceRandom = Math.floor(Math.random() * misFichas.length)
+      let ficha = misFichas[indiceRandom]
+      misFichasElegidas.push(ficha, ficha)
+      misFichas.splice(indiceRandom, 1)
+   }
+
+   for(let y = 0; y < ancho; y++){
+      let fila = []
+      for(let x = 0; x < alto; x++){
+         let indiceRandom = Math.floor(Math.random() * misFichasElegidas.length)
+         let ficha = misFichasElegidas[indiceRandom]
+         fila.push(ficha)
+         misFichasElegidas.splice(indiceRandom, 1) 
+      }
+      miTablero.push(fila)
+   }
+
+   return res.status(201).send(
+      {  "tableroId": 123,
+         "tablero": miTablero
+      }
+   )
 
 });
 
