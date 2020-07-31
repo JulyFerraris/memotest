@@ -27,6 +27,9 @@ app.get('/api/tablero', (req, res) => {
 
 
 
+let tableros = []
+
+
 // armar tabero
 app.post('/api/tableros', (req, res) => {
    let ancho = req.body.ancho
@@ -39,7 +42,6 @@ app.post('/api/tableros', (req, res) => {
 
    if (!ancho || !alto) return res.status(400).send('El ancho y el alto son obligatorios')
    if ((ancho * alto) % 2 === 1) return res.status(400).send('La grilla debe contener cantidad par de celdas, modifique el ancho o el alto')
-   
 
    for(let i = 0; i < cantPares; i++){
       let indiceRandom = Math.floor(Math.random() * misFichas.length)
@@ -58,23 +60,18 @@ app.post('/api/tableros', (req, res) => {
       }
       miTablero.push(fila)
    }
-
-   return res.status(201).send(
-      {  "tableroId": 123,
-         "tablero": miTablero
-      }
-   )
-
+   tableros.push({'tableroId': tableros.length, 'tablero': miTablero})
+   return res.status(201).send(tableros[tableros.length - 1])
 });
 
 
 // pedir el contenido de una ficha
 app.get('/api/tableros/:taberoId', (req, res) => {
-   let posX = req.params.posx
-   let posY = req.params.posY
-   //let id = req.params.id
+   let posX = req.query.posX
+   let posY = req.query.posY
+   let id = req.params.tableroId
 
-   //if () return res.status(404).send("el tablero no existe")
+   if(!tableros[id]) return res.status(404).send("el tablero no existe")
    if (!posX || !posY) return res.status(400).send('faltan datos para encontrar la ficha')
    if (posX >= tablero.length || posY >= tablero[0].length) return res.status(400).send('Por favor ingrese coordenadas válidas')
    
