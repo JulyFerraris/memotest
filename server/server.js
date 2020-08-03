@@ -25,8 +25,6 @@ app.get('/api/tablero', (req, res) => {
 });
 
 
-
-
 let tableros = []
 
 
@@ -64,19 +62,25 @@ app.post('/api/tableros', (req, res) => {
    return res.status(201).send(tableros[tableros.length - 1])
 });
 
+// chequear si el tablero existe
+const existeTablero = (tableroId) => tableroId < tableros.length
+
 
 // pedir el contenido de una ficha
-app.get('/api/tableros/:taberoId', (req, res) => {
+app.get('/api/tableros/:tableroId', (req, res) => {
    let posX = req.query.posX
    let posY = req.query.posY
    let id = req.params.tableroId
 
-   if(!tableros[id]) return res.status(404).send("el tablero no existe")
+   if(!existeTablero(id)) return res.status(404).send('el tablero no existe')
    if (!posX || !posY) return res.status(400).send('faltan datos para encontrar la ficha')
-   if (posX >= tablero.length || posY >= tablero[0].length) return res.status(400).send('Por favor ingrese coordenadas válidas')
+   if (posX >= tableros[id].tablero.length || posY >= tableros[id].tablero[0].length) return res.status(400).send('Por favor ingrese coordenadas válidas')
    
-   return res.status(200).send('contenido ficha') 
-
+   return res.status(200).send({
+      'posX': posX,
+      'posY': posY,
+      'valor': tableros[id].tablero[posX][posY]
+   })
 });
 
 
@@ -84,13 +88,29 @@ app.get('/api/tableros/:taberoId', (req, res) => {
 app.post('/api/tableros/:tableroId', (req, res) => {
    let ficha1 = req.body.ficha1
    let ficha2 = req.body.ficha2
+   let id = req.params.tableroId
 
-   if (!ficha1 || !ficha2) return res.status(400).send('se necesitan 2 fichas para poder comparar')
-   if (tablero[ficha1[0]]>= tablero.length || tablero[ficha1[1]] >= tablero[0].length) return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 1')
-   if (tablero[ficha2[0]]>= tablero.length || tablero[ficha2[1]] >= tablero[0].length) return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 2') 
+   if(!existeTablero(id)) return res.status(404).send('el tablero no existe')
+   if(!ficha1 || !ficha2) return res.status(400).send('se necesitan 2 fichas para poder comparar')
 
-   return res.status(201).send('son pares? true/false') 
+   if(ficha1[0] === ficha2[0] && ficha1[1] === ficha2[1]){ 
+      return res.status(400).send('elija 2 fichas distinas')
+   }
+
+   if(ficha1[0] >= tableros[id].tablero.length || ficha1[1] >= tableros[id].tablero[0].length){ 
+      return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 1')
+   }
+
+   if(ficha2[0] >= tableros[id].tablero.length || ficha2[1] >= tableros[id].tablero[0].length) {
+      return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 2')
+   }
+
+   tableros[id].tablero[ficha1[0]][ficha1[1]] === tableros[id].tablero[ficha2[0]][ficha2[1]] ?
+      res.status(201).send(true) : res.status(201).send(false)
+
 });
+
+
 
 /*
 //consultar el estado de la partida al servidor 
