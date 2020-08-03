@@ -24,19 +24,18 @@ app.get('/api/tablero', (req, res) => {
    })
 });
 
-
+let fichas = [ 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 let tableros = []
-
+let jugadas = []
 
 // armar tabero
 app.post('/api/tableros', (req, res) => {
-   let ancho = req.body.ancho
-   let alto = req.body.alto 
-   let fichas = [ 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-   let cantPares = (ancho * alto) / 2
    let misFichas = [...fichas]
    let misFichasElegidas = []
    let miTablero = []
+   let ancho = req.body.ancho
+   let alto = req.body.alto 
+   let cantPares = (ancho * alto) / 2
 
    if (!ancho || !alto) return res.status(400).send('El ancho y el alto son obligatorios')
    if ((ancho * alto) % 2 === 1) return res.status(400).send('La grilla debe contener cantidad par de celdas, modifique el ancho o el alto')
@@ -58,7 +57,12 @@ app.post('/api/tableros', (req, res) => {
       }
       miTablero.push(fila)
    }
-   tableros.push({'tableroId': tableros.length, 'tablero': miTablero})
+   tableros.push({
+      'tableroId': tableros.length, 
+      'tablero': miTablero,
+      'alto': alto,
+      'ancho': ancho
+   })
    return res.status(201).send(tableros[tableros.length - 1])
 });
 
@@ -89,7 +93,7 @@ app.post('/api/tableros/:tableroId', (req, res) => {
    let ficha1 = req.body.ficha1
    let ficha2 = req.body.ficha2
    let id = req.params.tableroId
-
+   
    if(!existeTablero(id)) return res.status(404).send('el tablero no existe')
    if(!ficha1 || !ficha2) return res.status(400).send('se necesitan 2 fichas para poder comparar')
 
@@ -105,25 +109,42 @@ app.post('/api/tableros/:tableroId', (req, res) => {
       return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 2')
    }
 
-   tableros[id].tablero[ficha1[0]][ficha1[1]] === tableros[id].tablero[ficha2[0]][ficha2[1]] ?
-      res.status(201).send(true) : res.status(201).send(false)
+   const pares = tableros[id].tablero[ficha1[0]][ficha1[1]] === tableros[id].tablero[ficha2[0]][ficha2[1]]
+   
+   jugadas.push({
+         'tablero': id,
+         'ficha1': ficha1,
+         'ficha2': ficha2,
+         'resultado': pares
+   })
 
+   res.status(201).send(jugadas[jugadas.length - 1])
+   
 });
 
 
 
-/*
+
 //consultar el estado de la partida al servidor 
 app.get('/api/tableros/:tableroId/estado', (req, res) => {
-   let sigueJugando = true
-   if(tablero.length === paresEncontrados) {
-      return res.status(200).send(false)
-   } 
-   return res.status(404).send("el tablero no existe")
-});*/
+   let id = req.params.tableroId
+   const ancho = tableros[id].ancho
+   const alto = tableros[id].alto
+   let cantPares = (ancho * alto) / 2
+
+   if(!existeTablero(id)) return res.status(404).send('el tablero no existe')
+   
+   const paresEncontrados = jugadas.filter(j => j.resultado && j.tablero === id)
+
+   return res.status(200).send(paresEncontrados.length === cantPares)
+   
+});
 
 
 app.listen(port, () => console.log(`Listening on port ${port}`))
+
+
+
 
 
 
