@@ -22,6 +22,22 @@ class Tablero extends React.Component {
     	};
 	}
 
+	_requestBoard = () => {
+		const data = { ancho: 4, alto: 2 } 
+
+		fetch('/api/tableros', {
+			method: 'POST',
+			headers: {
+			 'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+		.then(response => response.json())
+ 		.then(resultado => this.setState({ tablero: resultado.tablero }))
+		 //en caso de error
+		 .catch(err => console.log(err))
+	}
+	
 	
 	_generarTablero = () => {
 		this.setState({ 
@@ -31,6 +47,7 @@ class Tablero extends React.Component {
 
 	componentDidMount() {
 		this._generarTablero()
+		this._requestBoard()
 	}
 
    _clickEnFicha = (coorX,coorY) => {
