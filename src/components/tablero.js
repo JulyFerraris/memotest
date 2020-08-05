@@ -15,6 +15,7 @@ class Tablero extends React.Component {
     	super(props);
     	this.state = {
 			tablero: [],
+			tableroId: 0,
 			posiblePar: [],
 			paresEncontrados: [],
 			intentos: 0,
@@ -24,7 +25,6 @@ class Tablero extends React.Component {
 
 	_requestBoard = () => {
 		const data = { ancho: 4, alto: 2 } 
-
 		fetch('/api/tableros', {
 			method: 'POST',
 			headers: {
@@ -33,10 +33,52 @@ class Tablero extends React.Component {
 			body: JSON.stringify(data)
 		})
 		.then(response => response.json())
- 		.then(resultado => this.setState({ tablero: resultado.tablero }))
-		 //en caso de error
-		 .catch(err => console.log(err))
+ 		.then(resultado => this.setState({ 
+			tablero: resultado.tablero,
+			tableroId: resultado.tableroId 
+		}, console.log('id',resultado.tableroId, 'ddd', this.state.tableroId) ))
+		.catch(err => console.log(err))
 	}
+
+	_contenidoFicha = () => {
+		let tableroId= this.state.tableroId
+		let posX= 0
+		let posY= 0
+
+		fetch(`/api/tableros/${tableroId}?posX=${posX}&posY=${posY}`, {
+			method: 'GET',
+			mode: 'cors' //misma url???
+		})
+		.then()
+		.catch(err => console.log(err))
+	}
+
+	_compararFichas = () => {
+		let tableroId= this.state.tableroId
+		const data = { "ficha1": [1,0], "ficha2": [1,1]}
+		fetch(`/api/tableros/${tableroId}`, {
+			method: 'POST',
+			headers: {
+			 'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+		.then()
+		.catch(err => console.log(err))
+	}
+
+	_finalizarPartida = () => {
+		let tableroId = this.state.tableroId
+		let state = this.state.juegoGanado
+		fetch(`/api/tableros/${tableroId}/${state}`, {
+			method: 'GET',
+			mode: 'cors', //misma url???
+		})
+		.then()
+		.catch(err => console.log(err))
+	}
+
+
 	
 	
 	_generarTablero = () => {
@@ -47,7 +89,11 @@ class Tablero extends React.Component {
 
 	componentDidMount() {
 		this._generarTablero()
+		
 		this._requestBoard()
+		this._contenidoFicha()
+		this._compararFichas()
+		this._finalizarPartida()
 	}
 
    _clickEnFicha = (coorX,coorY) => {
@@ -133,7 +179,7 @@ class Tablero extends React.Component {
 
 	render(){
 		return <React.Fragment>
-			
+			{console.log('555',this.state.tableroId)}
 			<div className="tablero">
 
 				{ 
