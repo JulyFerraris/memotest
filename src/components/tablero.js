@@ -4,6 +4,7 @@ import './tablero.css'
 import Ficha from '../components/ficha'
 import Contador from '../components/contador'
 import { fichas, armarTablero} from '../utils/logica'
+import TableroClient from '../clients/TableroClient'
 
 
 const filas = 2
@@ -12,46 +13,22 @@ const columnas = 3
 class Tablero extends React.Component {
    
    constructor(props) {
-    	super(props);
+		super(props);
     	this.state = {
 			tablero: [],
-			tableroId: 0,
+			tableroId: '',
 			posiblePar: [],
 			paresEncontrados: [],
 			intentos: 0,
 			juegoGanado: false
-    	};
+		};
+		 
+		this.setState = this.setState.bind(this)
+		let cliente = new TableroClient(this.setState)
+		this.tableroClient = cliente
 	}
 
-	_requestBoard = () => {
-		const data = { ancho: 4, alto: 2 } 
-		fetch('/api/tableros', {
-			method: 'POST',
-			headers: {
-			 'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		})
-		.then(response => response.json())
- 		.then(resultado => this.setState({ 
-			tablero: resultado.tablero,
-			tableroId: resultado.tableroId 
-		}, console.log('id',resultado.tableroId, 'ddd', this.state.tableroId) ))
-		.catch(err => console.log(err))
-	}
 
-	_contenidoFicha = () => {
-		let tableroId= this.state.tableroId
-		let posX= 0
-		let posY= 0
-
-		fetch(`/api/tableros/${tableroId}?posX=${posX}&posY=${posY}`, {
-			method: 'GET',
-			mode: 'cors' //misma url???
-		})
-		.then()
-		.catch(err => console.log(err))
-	}
 
 	_compararFichas = () => {
 		let tableroId= this.state.tableroId
@@ -71,8 +48,7 @@ class Tablero extends React.Component {
 		let tableroId = this.state.tableroId
 		let state = this.state.juegoGanado
 		fetch(`/api/tableros/${tableroId}/${state}`, {
-			method: 'GET',
-			mode: 'cors', //misma url???
+			method: 'GET'
 		})
 		.then()
 		.catch(err => console.log(err))
@@ -81,22 +57,23 @@ class Tablero extends React.Component {
 
 	
 	
-	_generarTablero = () => {
+	/*_generarTablero = () => {
 		this.setState({ 
 			tablero: armarTablero(fichas,filas,columnas)
 		})
-	}
+	}*/
 
 	componentDidMount() {
-		this._generarTablero()
+		//this._generarTablero()
+		this.tableroClient.requestBoard()
 		
-		this._requestBoard()
-		this._contenidoFicha()
-		this._compararFichas()
-		this._finalizarPartida()
 	}
 
-   _clickEnFicha = (coorX,coorY) => {
+	_clickEnFicha = (coorX,coorY) => {
+		this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY)
+	}
+
+  /* _clickEnFicha = (coorX,coorY) => {
 		switch(this.state.posiblePar.length) {
 			case 0:
 				//guardo la primer ficha  en "posiblePar"
@@ -132,7 +109,7 @@ class Tablero extends React.Component {
 			default:
 				console.log('Ups, algo salió mal');
 		}
-	}
+	}*/
 
 	_flipCard = (coorX, coorY) => {
 		//si hizo click
@@ -179,7 +156,6 @@ class Tablero extends React.Component {
 
 	render(){
 		return <React.Fragment>
-			{console.log('555',this.state.tableroId)}
 			<div className="tablero">
 
 				{ 
