@@ -65,12 +65,12 @@ class Tablero extends React.Component {
 
 	componentDidMount() {
 		//this._generarTablero()
-		this.tableroClient.requestBoard()
+		this.tableroClient.requestBoard(3,4)
 		
 	}
 
 	_clickEnFicha = (coorX,coorY) => {
-		this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY)
+		this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
 	}
 
   /* _clickEnFicha = (coorX,coorY) => {
@@ -114,17 +114,17 @@ class Tablero extends React.Component {
 	_flipCard = (coorX, coorY) => {
 		//si hizo click
 		for(let i = 0; i < this.state.posiblePar.length; i++){
-			if (this.state.posiblePar[i][0] === coorX && this.state.posiblePar[i][1] === coorY){
-				return true
+			if (this.state.posiblePar[i].posX === coorX && this.state.posiblePar[i].posY === coorY){
+				return this.state.posiblePar[i].value
 			}
 		}
 		// Si estan en "paresEncontrados" 
 		for(let i = 0; i < this.state.paresEncontrados.length; i++){
-			if (this.state.paresEncontrados[i][0] === coorX && this.state.paresEncontrados[i][1] === coorY){
-				return true
+			if (this.state.paresEncontrados[i].posX === coorX && this.state.paresEncontrados[i].posY === coorY){
+				return this.state.posiblePar[i].value
 			}
 		}
-		return false
+		return ''
 	}
 
 	_sonPares = (coorX1, coorY1, coorX2, coorY2) => {
@@ -155,6 +155,9 @@ class Tablero extends React.Component {
 
 
 	render(){
+
+		console.log(this.state.posiblePar)
+
 		return <React.Fragment>
 			<div className="tablero">
 
@@ -164,10 +167,11 @@ class Tablero extends React.Component {
 							<div className="tablero-row" key={x} > 
 								{ 
 									row.map( (card, y) => {
-										const isVisible = this._flipCard(x, y)
+										const cardLabel = this._flipCard(x, y)
+										const isVisible = !!cardLabel
 										const yaElegida = () => {}
 										return <Ficha 
-											cardLabel={card} 
+											cardLabel={cardLabel} 
 											key={y} 
 											isVisible={isVisible} 
 											coordenadas={ isVisible ? yaElegida : () => this._clickEnFicha(x, y)}

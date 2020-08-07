@@ -81,9 +81,9 @@ app.get('/api/tableros/:tableroId', (req, res) => {
    if (posX >= tableros[id].tablero.length || posY >= tableros[id].tablero[0].length) return res.status(400).send('Por favor ingrese coordenadas válidas')
    
    return res.status(200).send({
-      'posX': posX,
-      'posY': posY,
-      'valor': tableros[id].tablero[posX][posY]
+      'posX': parseInt(posX),
+      'posY': parseInt(posY),
+      'value': tableros[id].tablero[posX][posY]
    })
 });
 

@@ -5,8 +5,9 @@ class TableroClient{
    }
 
    //acá vamos a controlar la 1er pegada
-   requestBoard = () => {
-      const data = { ancho: 2, alto: 3 } 
+   
+   requestBoard = (ancho, alto) => {
+      const data = { ancho: ancho, alto: alto  } 
 		fetch('/api/tableros', {
 			method: 'POST',
 			headers: {
@@ -16,18 +17,23 @@ class TableroClient{
 		})
 		.then(response => response.json())
  		.then(resultado => this._updateState({ 
-			tablero: resultado.tablero,
+         //tablero: resultado.tablero,
+         tablero: Array.from({ length: ancho }).map(i => Array.from({ length: alto })),
 			tableroId: resultado.tableroId 
 		}))
 		.catch(err => console.log(err))
    }
 
    //acá vamos a controlar la 2da
-   getChipContent = (tableroId, posX, posY) => {
+   getChipContent = (tableroId, posX, posY, posiblePar) => {
       fetch(`/api/tableros/${tableroId}?posX=${posX}&posY=${posY}`)
       .then(response => response.json())
-      .then(response => console.log(response))
-		.catch(err => console.log(err))
+      .then(response => {
+         this._updateState({
+            posiblePar: [...posiblePar, response]
+         })
+      })
+      .catch(err => console.log(err)) 
    }
 
    
