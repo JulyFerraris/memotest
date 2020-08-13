@@ -29,21 +29,6 @@ class Tablero extends React.Component {
 	}
 
 
-
-	_compararFichas = () => {
-		let tableroId= this.state.tableroId
-		const data = { "ficha1": [1,0], "ficha2": [1,1]}
-		fetch(`/api/tableros/${tableroId}`, {
-			method: 'POST',
-			headers: {
-			 'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		})
-		.then()
-		.catch(err => console.log(err))
-	}
-
 	_finalizarPartida = () => {
 		let tableroId = this.state.tableroId
 		let state = this.state.juegoGanado
@@ -54,49 +39,31 @@ class Tablero extends React.Component {
 		.catch(err => console.log(err))
 	}
 
+	componentDidMount() {
+		this.tableroClient.requestBoard(3,4)
+	}
 
-	
-	
-	/*_generarTablero = () => {
-		this.setState({ 
-			tablero: armarTablero(fichas,filas,columnas)
-		})
+	/*_clickEnFicha = (coorX,coorY) => {
+		this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
 	}*/
 
-	componentDidMount() {
-		//this._generarTablero()
-		this.tableroClient.requestBoard(3,4)
-		
-	}
-
-	_clickEnFicha = (coorX,coorY) => {
-		this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
-	}
-
-  /* _clickEnFicha = (coorX,coorY) => {
+   _clickEnFicha = (coorX,coorY) => {
 		switch(this.state.posiblePar.length) {
 			case 0:
+				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
 				//guardo la primer ficha  en "posiblePar"
-				this.setState({
+				/*this.setState({
 					posiblePar: [ ...this.state.posiblePar, [coorX, coorY]],
-				})
+				})*/
 				break;
 			case 1:
 				// si entra acá es porque ya seleccionó 2 fichas
 				const coorX2 = this.state.posiblePar[0][0]
 				const coorY2 = this.state.posiblePar[0][1]
-				// si no la había elegido antes la agrego a posiblePar
-				this.setState({
-					posiblePar: [ ...this.state.posiblePar, [coorX, coorY]],
-				})	
-				// y si son pares las guardo en "paresEncontrados"
-				if(this._sonPares(coorX, coorY,coorX2,coorY2)) {
-					this.setState({
-						paresEncontrados: [...this.state.paresEncontrados,[coorX,coorY],[coorX2,coorY2] ]
-						}, () => this._ganarJuego() 
-					)
-				}
-				// actualizo la cantidad de intentos
+
+				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
+				this.tableroClient.compareChips(this.state.tableroId, this.state.posiblePar[0].posX, this.state.posiblePar[0].posY, coorX, coorY, this.state.paresEncontrados)
+
 				this._sumarIntentos();
 				break;
 			case 2:
@@ -109,7 +76,7 @@ class Tablero extends React.Component {
 			default:
 				console.log('Ups, algo salió mal');
 		}
-	}*/
+	}
 
 	_flipCard = (coorX, coorY) => {
 		//si hizo click

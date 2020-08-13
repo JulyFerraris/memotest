@@ -36,10 +36,20 @@ class TableroClient{
       .catch(err => console.log(err)) 
    }
 
-   
-
    //acá vamos a controlar la 3ra
-   compareChips = (tableroId,posX1, posY1, posX2,posY2) => {}
+   compareChips = (tableroId,posX1, posY1, posX2,posY2) => {
+		const data =  { 'ficha1': [posX1, posY1], 'ficha2': [posX2, posY2] }
+		fetch(`/api/tableros/${tableroId}`, {
+			method: 'POST',
+			headers: {
+			 'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+		.then(response => response.json())
+      .then(response => { console.log(response)})
+		.catch(err => console.log(err))
+   }
 
    //acá vamos a controlar la 4ta
    getGameStatus = (tableroId) => {}
