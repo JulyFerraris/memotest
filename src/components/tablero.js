@@ -43,35 +43,24 @@ class Tablero extends React.Component {
 		this.tableroClient.requestBoard(3,4)
 	}
 
-	/*_clickEnFicha = (coorX,coorY) => {
-		this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
-	}*/
-
+	
    _clickEnFicha = (coorX,coorY) => {
-		switch(this.state.posiblePar.length) {
+		switch(this.state.posiblePar.length){
 			case 0:
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
-				//guardo la primer ficha  en "posiblePar"
-				/*this.setState({
-					posiblePar: [ ...this.state.posiblePar, [coorX, coorY]],
-				})*/
 				break;
 			case 1:
-				// si entra acá es porque ya seleccionó 2 fichas
-				const coorX2 = this.state.posiblePar[0][0]
-				const coorY2 = this.state.posiblePar[0][1]
-
+				//const coorX2 = this.state.posiblePar[0][0]
+				//const coorY2 = this.state.posiblePar[0][1]
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
 				this.tableroClient.compareChips(this.state.tableroId, this.state.posiblePar[0].posX, this.state.posiblePar[0].posY, coorX, coorY, this.state.paresEncontrados)
-
 				this._sumarIntentos();
 				break;
 			case 2:
-				// Acá empieza una nueva jugada
-				// saco de "posiblePar" las fichas de la jugada anterior y dejo la seleccionada
-				this.setState({
+				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
+				/*this.setState({
 					posiblePar: [[coorX, coorY]]
-				})
+				})*/
 				break;
 			default:
 				console.log('Ups, algo salió mal');
