@@ -60,7 +60,17 @@ class TableroClient{
    }
 
    //acá vamos a controlar la 4ta
-   getGameStatus = (tableroId) => {}
+   getGameStatus = (tableroId) => {
+      fetch(`/api/tableros/${tableroId}/status`)
+      .then(response => response.json())
+      .then(response => {
+         this._updateState({
+            attempts: response.attempts,
+			   status: response.status
+         })
+      })
+      .catch(err => console.log(err)) 
+   }
 }
 
 

@@ -6,9 +6,9 @@ import Contador from '../components/contador'
 import { fichas, armarTablero} from '../utils/logica'
 import TableroClient from '../clients/TableroClient'
 
-
 const filas = 2
 const columnas = 3
+
 
 class Tablero extends React.Component {
    
@@ -18,9 +18,9 @@ class Tablero extends React.Component {
 			tablero: [],
 			tableroId: '',
 			posiblePar: [],
+			attempts: 0,
 			paresEncontrados: [],
-			intentos: 0,
-			juegoGanado: false
+			status:'PLAYING'
 		};
 		 
 		this.setState = this.setState.bind(this)
@@ -28,22 +28,10 @@ class Tablero extends React.Component {
 		this.tableroClient = cliente
 	}
 
-
-	_finalizarPartida = () => {
-		let tableroId = this.state.tableroId
-		let state = this.state.juegoGanado
-		fetch(`/api/tableros/${tableroId}/${state}`, {
-			method: 'GET'
-		})
-		.then()
-		.catch(err => console.log(err))
-	}
-
 	componentDidMount() {
-		this.tableroClient.requestBoard(3,4)
+		this.tableroClient.requestBoard(3,2)
 	}
 
-	
    _clickEnFicha = (coorX,coorY) => {
 		switch(this.state.posiblePar.length){
 			case 0:
@@ -52,7 +40,6 @@ class Tablero extends React.Component {
 			case 1:
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
 				this.tableroClient.compareChips(this.state.tableroId, this.state.posiblePar[0].posX, this.state.posiblePar[0].posY, coorX, coorY, this.state.paresEncontrados)
-				this._sumarIntentos();
 				break;
 			case 2:
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, [])
@@ -78,26 +65,14 @@ class Tablero extends React.Component {
 		return ''
 	}
 
-
-	_sumarIntentos = () => {
-		this.setState({
-			intentos: this.state.intentos + 1
-		})
-	}
-
-	_ganarJuego = () => {
-		if(this.state.paresEncontrados.length === filas * columnas) {
-			this.setState({ juegoGanado: true })
-		}
-	}
-
 	_nuevoJuego = () => {
 		this.setState({
 			tablero: armarTablero(fichas,filas,columnas),
+			tableroId: '',
 			posiblePar: [],
+			attempts: 0,
 			paresEncontrados: [],
-			intentos: 0,
-			juegoGanado: false
+			status:'PLAYING'
 		})
 	}
 
@@ -131,9 +106,9 @@ class Tablero extends React.Component {
 					})
 				}
 			</div>
-			<Contador intentos={this.state.intentos} />
+			<Contador intentos={this.state.attempts} />
 			
-			{this.state.juegoGanado ? 
+			{this.state.status === 'FINISHED' ? 
 				<React.Fragment>
       			<h2>¡Ganaste!</h2>
       			<button onClick={this._nuevoJuego} >Nuevo Juego</button>
