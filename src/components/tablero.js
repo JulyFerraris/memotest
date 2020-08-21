@@ -50,17 +50,12 @@ class Tablero extends React.Component {
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
 				break;
 			case 1:
-				//const coorX2 = this.state.posiblePar[0][0]
-				//const coorY2 = this.state.posiblePar[0][1]
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
 				this.tableroClient.compareChips(this.state.tableroId, this.state.posiblePar[0].posX, this.state.posiblePar[0].posY, coorX, coorY, this.state.paresEncontrados)
 				this._sumarIntentos();
 				break;
 			case 2:
-				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
-				/*this.setState({
-					posiblePar: [[coorX, coorY]]
-				})*/
+				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, [])
 				break;
 			default:
 				console.log('Ups, algo salió mal');
@@ -77,15 +72,12 @@ class Tablero extends React.Component {
 		// Si estan en "paresEncontrados" 
 		for(let i = 0; i < this.state.paresEncontrados.length; i++){
 			if (this.state.paresEncontrados[i].posX === coorX && this.state.paresEncontrados[i].posY === coorY){
-				return this.state.posiblePar[i].value
+				return this.state.paresEncontrados[i].value
 			}
 		}
 		return ''
 	}
 
-	_sonPares = (coorX1, coorY1, coorX2, coorY2) => {
-		return (this.state.tablero[coorX1][coorY1] === this.state.tablero[coorX2][coorY2]) ? true : false
-	}
 
 	_sumarIntentos = () => {
 		this.setState({

@@ -37,7 +37,7 @@ class TableroClient{
    }
 
    //acá vamos a controlar la 3ra
-   compareChips = (tableroId,posX1, posY1, posX2,posY2) => {
+   compareChips = (tableroId,posX1, posY1, posX2,posY2, paresEncontrados) => {
 		const data =  { 'ficha1': [posX1, posY1], 'ficha2': [posX2, posY2] }
 		fetch(`/api/tableros/${tableroId}`, {
 			method: 'POST',
@@ -46,8 +46,16 @@ class TableroClient{
 			},
 			body: JSON.stringify(data)
 		})
-		.then(response => response.json())
-      .then(response => { console.log(response)})
+      .then(response => response.json())
+      .then(response => { 
+         console.log(response)
+         if (response.resultado){
+            this._updateState({
+               paresEncontrados: [...paresEncontrados, response.ficha1, response.ficha2]
+            })
+         }
+      })
+      
 		.catch(err => console.log(err))
    }
 

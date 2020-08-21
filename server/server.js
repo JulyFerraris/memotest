@@ -111,10 +111,22 @@ app.post('/api/tableros/:tableroId', (req, res) => {
 
    const pares = tableros[id].tablero[ficha1[0]][ficha1[1]] === tableros[id].tablero[ficha2[0]][ficha2[1]]
    
+   const ficha1B = {
+      'posX': ficha1[0],
+      'posY': ficha1[1],
+      'value': tableros[id].tablero[ficha1[0]][ficha1[1]]
+   }
+
+   const ficha2B = {
+      'posX': ficha2[0],
+      'posY': ficha2[1],
+      'value': tableros[id].tablero[ficha2[0]][ficha2[1]]
+   }
+
    jugadas.push({
          'tablero': id,
-         'ficha1': ficha1,
-         'ficha2': ficha2,
+         'ficha1': ficha1B,
+         'ficha2': ficha2B,
          'resultado': pares
    })
 
