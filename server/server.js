@@ -143,12 +143,12 @@ app.get('/api/tableros/:tableroId/estado', (req, res) => {
    const ancho = tableros[id].ancho
    const alto = tableros[id].alto
    let cantPares = (ancho * alto) / 2
-   let estadoPartida = paresEncontrados.length === cantPares ? 'FINISHED' : 'PLAYING'  
-   
+    
    if(!existeTablero(id)) return res.status(404).send('el tablero no existe')
    
    const cantIntentos = jugadas.filter(j => j.tablero === id).length
    const paresEncontrados = jugadas.filter(j => j.resultado && j.tablero === id)
+   let estadoPartida = paresEncontrados.length === cantPares ? 'FINISHED' : 'PLAYING' 
 
    const respuesta = {
       'status': estadoPartida, 
