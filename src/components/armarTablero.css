@@ -1,0 +1,31 @@
+.form {
+   background-color: #CCC;
+	border-radius: 5px;
+	margin: 30px auto;
+   padding: 50px;
+   display: inline-block;
+}
+
+h4 {
+   margin: 0 0 30px 0;
+}
+fieldset {
+   display:inline-block;
+   border: none;
+   margin: 0 10px;
+   text-align: left;
+}
+input{
+   width: 120px;
+   height: 40px;
+}
+
+label {
+   display: block;
+   margin-bottom: 5px;
+}
+
+button {
+   line-height: 40px;
+   padding: 0 30px;
+}

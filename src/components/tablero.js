@@ -6,8 +6,9 @@ import Contador from '../components/contador'
 import { fichas, armarTablero} from '../utils/logica'
 import TableroClient from '../clients/TableroClient'
 
-const filas = 2
-const columnas = 3
+import ArmarTablero from '../components/armarTablero'
+
+
 
 
 class Tablero extends React.Component {
@@ -17,10 +18,11 @@ class Tablero extends React.Component {
     	this.state = {
 			tablero: [],
 			tableroId: '',
-			posiblePar: [],
-			attempts: 0,
 			paresEncontrados: [],
-			status:'PLAYING'
+			posiblePar: [],
+			status:'PLAYING',
+			attempts: 0,
+			iniciarPartida: true,
 		};
 		 
 		this.setState = this.setState.bind(this)
@@ -29,7 +31,7 @@ class Tablero extends React.Component {
 	}
 
 	componentDidMount() {
-		this.tableroClient.requestBoard(3,2)
+		this.tableroClient.requestBoard(2,3)
 	}
 
    _clickEnFicha = (coorX,coorY) => {
@@ -40,6 +42,7 @@ class Tablero extends React.Component {
 			case 1:
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
 				this.tableroClient.compareChips(this.state.tableroId, this.state.posiblePar[0].posX, this.state.posiblePar[0].posY, coorX, coorY, this.state.paresEncontrados)
+				this.tableroClient.getGameStatus(this.state.tableroId)
 				break;
 			case 2:
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, [])
@@ -65,56 +68,70 @@ class Tablero extends React.Component {
 		return ''
 	}
 
-	_nuevoJuego = () => {
+
+	_armarTablero = () => {
 		this.setState({
-			tablero: armarTablero(fichas,filas,columnas),
-			tableroId: '',
-			posiblePar: [],
-			attempts: 0,
-			paresEncontrados: [],
-			status:'PLAYING'
+			iniciarPartida: true
 		})
 	}
 
+	_nuevoJuego = (filas, columnas) => {
+		this.setState({
+			tablero: [armarTablero(fichas,filas,columnas)],
+			paresEncontrados: [],
+			posiblePar: [],
+			status:'PLAYING',
+			attempts: 0,
+			iniciarPartida: false
+		})
+		this.tableroClient.requestBoard(filas,columnas)
+	}
+
+	
+
+
 
 	render(){
-
-		console.log(this.state.posiblePar)
-
-		return <React.Fragment>
-			<div className="tablero">
-
-				{ 
-					this.state.tablero.map((row, x) => {
-						return (
-							<div className="tablero-row" key={x} > 
-								{ 
-									row.map( (card, y) => {
-										const cardLabel = this._flipCard(x, y)
-										const isVisible = !!cardLabel
-										const yaElegida = () => {}
-										return <Ficha 
-											cardLabel={cardLabel} 
-											key={y} 
-											isVisible={isVisible} 
-											coordenadas={ isVisible ? yaElegida : () => this._clickEnFicha(x, y)}
-										/>;		    						
-									})
-								}
-							</div>
-						)
-					})
-				}
-			</div>
-			<Contador intentos={this.state.attempts} />
-			
-			{this.state.status === 'FINISHED' ? 
-				<React.Fragment>
-      			<h2>¡Ganaste!</h2>
-      			<button onClick={this._nuevoJuego} >Nuevo Juego</button>
-				</React.Fragment> 
-			: null }
 		
+		return <React.Fragment>
+				
+			{this.state.iniciarPartida ? 
+				<ArmarTablero formAction={this._nuevoJuego} />
+			: 
+				<React.Fragment>
+					<div className="tablero">
+						{ 
+							this.state.tablero.map((row, x) => {
+								return (
+									<div className="tablero-row" key={x} > 
+										{ 
+											row.map( (card, y) => {
+												const cardLabel = this._flipCard(x, y)
+												const isVisible = !!cardLabel
+												const yaElegida = () => {}
+												return <Ficha 
+													cardLabel={cardLabel} 
+													key={y} 
+													isVisible={isVisible} 
+													coordenadas={ isVisible ? yaElegida : () => this._clickEnFicha(x, y)}
+												/>;		    						
+											})
+										}
+									</div>
+								)
+							})
+						}
+					</div>
+					<Contador intentos={this.state.attempts} />
+					{this.state.status === 'FINISHED' ? 
+						<React.Fragment>
+      					<h2>¡Ganaste!</h2>
+      					<button onClick={this._armarTablero} >Nuevo Juego</button>
+						</React.Fragment> 
+					: null }
+				</React.Fragment>
+			}
+			
 		</React.Fragment>
 	}
 }
