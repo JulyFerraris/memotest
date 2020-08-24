@@ -3,6 +3,8 @@ import './tablero.css'
 
 import Ficha from '../components/ficha'
 import Contador from '../components/contador'
+import Victoria from '../components/victoria'
+
 import { fichas, armarTablero} from '../utils/logica'
 import TableroClient from '../clients/TableroClient'
 
@@ -69,68 +71,35 @@ class Tablero extends React.Component {
 	}
 
 
-	_armarTablero = () => {
-		this.setState({
-			iniciarPartida: true
-		})
-	}
-
-	_nuevoJuego = (filas, columnas) => {
-		this.setState({
-			tablero: [armarTablero(fichas,filas,columnas)],
-			paresEncontrados: [],
-			posiblePar: [],
-			status:'PLAYING',
-			attempts: 0,
-			iniciarPartida: false
-		})
-		this.tableroClient.requestBoard(filas,columnas)
-	}
-
-	
-
-
-
 	render(){
+		if(this.state.iniciarPartida) return <ArmarTablero formAction={this._nuevoJuego} />
 		
 		return <React.Fragment>
-				
-			{this.state.iniciarPartida ? 
-				<ArmarTablero formAction={this._nuevoJuego} />
-			: 
-				<React.Fragment>
-					<div className="tablero">
-						{ 
-							this.state.tablero.map((row, x) => {
-								return (
-									<div className="tablero-row" key={x} > 
-										{ 
-											row.map( (card, y) => {
-												const cardLabel = this._flipCard(x, y)
-												const isVisible = !!cardLabel
-												const yaElegida = () => {}
-												return <Ficha 
-													cardLabel={cardLabel} 
-													key={y} 
-													isVisible={isVisible} 
-													coordenadas={ isVisible ? yaElegida : () => this._clickEnFicha(x, y)}
-												/>;		    						
-											})
-										}
-									</div>
-								)
-							})
-						}
-					</div>
-					<Contador intentos={this.state.attempts} />
-					{this.state.status === 'FINISHED' ? 
-						<React.Fragment>
-      					<h2>¡Ganaste!</h2>
-      					<button onClick={this._armarTablero} >Nuevo Juego</button>
-						</React.Fragment> 
-					: null }
-				</React.Fragment>
-			}
+			<div className="tablero">
+				{ 
+					this.state.tablero.map((row, x) => {
+						return (
+							<div className="tablero-row" key={x} > 
+								{ 
+									row.map( (card, y) => {
+										const cardLabel = this._flipCard(x, y)
+										const isVisible = !!cardLabel
+										const yaElegida = () => {}
+										return <Ficha 
+											cardLabel={cardLabel} 
+											key={y} 
+											isVisible={isVisible} 
+											coordenadas={ isVisible ? yaElegida : () => this._clickEnFicha(x, y)}
+										/>;		    						
+									})
+								}
+							</div>
+						)
+					})
+				}
+			</div>
+			<Contador intentos={this.state.attempts} />
+			<Victoria onNewGame={this._armarTablero} show={this.state.status === 'FINISHED'} />
 			
 		</React.Fragment>
 	}
