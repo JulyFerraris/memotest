@@ -5,7 +5,7 @@ const Victoria = (props) => {
    return(
       <React.Fragment>
 			<h2>¡Ganaste!</h2>
-			<button onClick={this.props.onNewGame()} >Nuevo Juego</button>
+			<button onClick={() => props.onNewGame(2,3)} >Nuevo Juego</button>
 		</React.Fragment> 
    )
 }

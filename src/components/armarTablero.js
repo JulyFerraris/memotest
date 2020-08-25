@@ -6,24 +6,20 @@ class ArmarTablero extends React.Component {
    constructor(props) {
 		super(props);
     	this.state = {
-			filas: 0,
-			columnas: 0
+			filas: 2,
+			columnas: 2
 		};
    }
 
    _onSubmit = (event) => {
       event.preventDefault();
       this.props.formAction(this.state.filas, this.state.columnas);
-      console.log('aaa',this.state.filas, this.state.columnas,)
-
    }
 
    _onChange = e => {
       this.setState({
          [e.target.name]: e.target.value
       })
-
-      console.log('xxx',this.state.filas, this.state.columnas,)
    }
 
    render(){

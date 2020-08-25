@@ -31,10 +31,10 @@ class Tablero extends React.Component {
 		let cliente = new TableroClient(this.setState)
 		this.tableroClient = cliente
 	}
-
+/*
 	componentDidMount() {
 		this.tableroClient.requestBoard(2,3)
-	}
+	}*/
 
    _clickEnFicha = (coorX,coorY) => {
 		switch(this.state.posiblePar.length){
@@ -72,7 +72,7 @@ class Tablero extends React.Component {
 
 
 	render(){
-		if(this.state.iniciarPartida) return <ArmarTablero formAction={this._nuevoJuego} />
+		if(this.state.iniciarPartida) return <ArmarTablero formAction={this.tableroClient.requestBoard} />
 		
 		return <React.Fragment>
 			<div className="tablero">
