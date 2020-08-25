@@ -4,13 +4,8 @@ import './tablero.css'
 import Ficha from '../components/ficha'
 import Contador from '../components/contador'
 import Victoria from '../components/victoria'
-
-import { fichas, armarTablero} from '../utils/logica'
 import TableroClient from '../clients/TableroClient'
-
 import ArmarTablero from '../components/armarTablero'
-
-
 
 
 class Tablero extends React.Component {
@@ -30,10 +25,6 @@ class Tablero extends React.Component {
 		let cliente = new TableroClient(this.setState)
 		this.tableroClient = cliente
 	}
-/*
-	componentDidMount() {
-		this.tableroClient.requestBoard(2,3)
-	}*/
 
    _clickEnFicha = (coorX,coorY) => {
 		switch(this.state.posiblePar.length){
@@ -69,6 +60,10 @@ class Tablero extends React.Component {
 		return ''
 	}
 
+	_toMainMenu = () => {
+		this.setState({ status:'START'})
+	}
+
 
 	render(){
 		if(this.state.status === 'START') return <ArmarTablero formAction={this.tableroClient.requestBoard} />
@@ -98,7 +93,7 @@ class Tablero extends React.Component {
 				}
 			</div>
 			<Contador intentos={this.state.attempts} />
-			<Victoria onNewGame={this._armarTablero} show={this.state.status === 'FINISHED'} />
+			<Victoria onNewGame={this._toMainMenu} show={this.state.status === 'FINISHED'} />
 			
 		</React.Fragment>
 	}

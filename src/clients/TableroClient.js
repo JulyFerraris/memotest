@@ -19,7 +19,10 @@ class TableroClient{
  		.then(resultado => this._updateState({ 
          tablero: Array.from({ length: ancho }).map(i => Array.from({ length: alto })),
          tableroId: resultado.tableroId,
-         status:'PLAYING'
+         status:'PLAYING',
+         paresEncontrados: [],
+			posiblePar: [],
+			attempts: 0
 		}))
 		.catch(err => console.log(err))
    }
