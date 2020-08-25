@@ -22,9 +22,8 @@ class Tablero extends React.Component {
 			tableroId: '',
 			paresEncontrados: [],
 			posiblePar: [],
-			status:'PLAYING',
-			attempts: 0,
-			iniciarPartida: true,
+			status:'START',
+			attempts: 0
 		};
 		 
 		this.setState = this.setState.bind(this)
@@ -72,7 +71,7 @@ class Tablero extends React.Component {
 
 
 	render(){
-		if(this.state.iniciarPartida) return <ArmarTablero formAction={this.tableroClient.requestBoard} />
+		if(this.state.status === 'START') return <ArmarTablero formAction={this.tableroClient.requestBoard} />
 		
 		return <React.Fragment>
 			<div className="tablero">

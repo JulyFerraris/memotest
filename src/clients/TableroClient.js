@@ -17,9 +17,9 @@ class TableroClient{
 		})
 		.then(response => response.json())
  		.then(resultado => this._updateState({ 
-         //tablero: resultado.tablero,
          tablero: Array.from({ length: ancho }).map(i => Array.from({ length: alto })),
-			tableroId: resultado.tableroId 
+         tableroId: resultado.tableroId,
+         status:'PLAYING'
 		}))
 		.catch(err => console.log(err))
    }
