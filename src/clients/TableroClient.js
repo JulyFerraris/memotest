@@ -4,8 +4,7 @@ class TableroClient{
       this._updateState = updateState
    }
 
-   //acá vamos a controlar la 1er pegada
-   
+
    requestBoard = (ancho, alto) => {
       const data = { ancho: ancho, alto: alto  } 
 		fetch('/api/tableros', {
@@ -27,7 +26,7 @@ class TableroClient{
 		.catch(err => console.log(err))
    }
 
-   //acá vamos a controlar la 2da
+
    getChipContent = (tableroId, posX, posY, posiblePar) => {
       fetch(`/api/tableros/${tableroId}?posX=${posX}&posY=${posY}`)
       .then(response => response.json())
@@ -39,7 +38,7 @@ class TableroClient{
       .catch(err => console.log(err)) 
    }
 
-   //acá vamos a controlar la 3ra
+
    compareChips = (tableroId,posX1, posY1, posX2,posY2, paresEncontrados) => {
 		const data =  { 'ficha1': [posX1, posY1], 'ficha2': [posX2, posY2] }
 		fetch(`/api/tableros/${tableroId}`, {
@@ -57,12 +56,11 @@ class TableroClient{
                paresEncontrados: [...paresEncontrados, response.ficha1, response.ficha2]
             })
          }
-      })
-      
+      })   
 		.catch(err => console.log(err))
    }
 
-   //acá vamos a controlar la 4ta
+
    getGameStatus = (tableroId) => {
       fetch(`/api/tableros/${tableroId}/estado`)
       .then(response => response.json())

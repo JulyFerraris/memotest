@@ -20,7 +20,6 @@ class Tablero extends React.Component {
 			status:'START',
 			attempts: 0
 		};
-		 
 		this.setState = this.setState.bind(this)
 		let cliente = new TableroClient(this.setState)
 		this.tableroClient = cliente
