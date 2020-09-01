@@ -1,47 +1,16 @@
+const BoardService = require('../services/BoardService')
 let boardController = {}
-
-let fichas = [ 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-let tableros = []
-let jugadas = []
 
 // chequear si el tablero existe
 const existeTablero = (tableroId) => tableroId < tableros.length
 
 boardController.requestBoard = (req,res) => {
-   let misFichas = [...fichas]
-   let misFichasElegidas = []
-   let miTablero = []
    let ancho = req.body.ancho
-   let alto = req.body.alto 
-   let cantPares = (ancho * alto) / 2
-
+   let alto = req.body.alto
    if (!ancho || !alto) return res.status(400).send('El ancho y el alto son obligatorios')
    if ((ancho * alto) % 2 === 1) return res.status(400).send('La grilla debe contener cantidad par de celdas, modifique el ancho o el alto')
-
-   for(let i = 0; i < cantPares; i++){
-      let indiceRandom = Math.floor(Math.random() * misFichas.length)
-      let ficha = misFichas[indiceRandom]
-      misFichasElegidas.push(ficha, ficha)
-      misFichas.splice(indiceRandom, 1)
-   }
-
-   for(let y = 0; y < ancho; y++){
-      let fila = []
-      for(let x = 0; x < alto; x++){
-         let indiceRandom = Math.floor(Math.random() * misFichasElegidas.length)
-         let ficha = misFichasElegidas[indiceRandom]
-         fila.push(ficha)
-         misFichasElegidas.splice(indiceRandom, 1) 
-      }
-      miTablero.push(fila)
-   }
-   tableros.push({
-      'tableroId': tableros.length, 
-      'tablero': miTablero,
-      'alto': alto,
-      'ancho': ancho
-   })
-   return res.status(201).send(tableros[tableros.length - 1])
+   const response = BoardService.requestBoard(ancho,alto)
+   return res.status(201).send(response)
 }
 
 boardController.getChipContent = (req,res) => {
