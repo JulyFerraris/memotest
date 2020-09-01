@@ -36,10 +36,21 @@ boardService.requestBoard = (alto, ancho) => {
    return tableros[tableros.length - 1]
 }
 
-boardService.getChipContent = (req,res) => {}
+boardService.getChipContent = (id, posX, posY) => {
+   return {
+      'posX': posX,
+      'posY': posY,
+      'value': tableros[id].tablero[posX][posY]
+   }
+}
 
-boardService.compareChips = (req,res) => {}
+boardService.doesBoardExist = (id) => id < tableros.length
 
-boardService.getGameStatus = (req,res) => {}
+boardService.hasValidCoordinates = (id, posX, posY) => posX < tableros[id].tablero.length && posY < tableros[id].tablero[0].length
+
+
+boardService.compareChips = () => {}
+
+boardService.getGameStatus = () => {}
 
 module.exports = boardService

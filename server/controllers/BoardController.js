@@ -1,8 +1,6 @@
 const BoardService = require('../services/BoardService')
 let boardController = {}
 
-// chequear si el tablero existe
-const existeTablero = (tableroId) => tableroId < tableros.length
 
 boardController.requestBoard = (req,res) => {
    let ancho = req.body.ancho
@@ -17,24 +15,21 @@ boardController.getChipContent = (req,res) => {
    let posX = req.query.posX
    let posY = req.query.posY
    let id = req.params.tableroId
-
-   if(!existeTablero(id)) return res.status(404).send('el tablero no existe')
-   if (!posX || !posY) return res.status(400).send('faltan datos para encontrar la ficha')
-   if (posX >= tableros[id].tablero.length || posY >= tableros[id].tablero[0].length) return res.status(400).send('Por favor ingrese coordenadas válidas')
-   
-   return res.status(200).send({
-      'posX': parseInt(posX),
-      'posY': parseInt(posY),
-      'value': tableros[id].tablero[posX][posY]
-   })
+   if(!BoardService.doesBoardExist(id)) return res.status(404).send('el tablero no existe')
+   if(!posX || !posY) return res.status(400).send('faltan datos para encontrar la ficha')
+   if(!BoardService.hasValidCoordinates(id, parseInt(posX), parseInt(posY))) return res.status(400).send('Por favor ingrese coordenadas válidas')
+   const response = BoardService.getChipContent(id, parseInt(posX), parseInt(posY))
+   return res.status(200).send(response)
 }
+
+
 
 boardController.compareChips = (req,res) => {
    let ficha1 = req.body.ficha1
    let ficha2 = req.body.ficha2
    let id = req.params.tableroId
    
-   if(!existeTablero(id)) return res.status(404).send('el tablero no existe')
+   if(!BoardService.doesBoardExist(id)) return res.status(404).send('el tablero no existe')
    if(!ficha1 || !ficha2) return res.status(400).send('se necesitan 2 fichas para poder comparar')
 
    if(ficha1[0] === ficha2[0] && ficha1[1] === ficha2[1]){ 
@@ -79,7 +74,7 @@ boardController.getGameStatus = (req,res) => {
    const alto = tableros[id].alto
    let cantPares = (ancho * alto) / 2
     
-   if(!existeTablero(id)) return res.status(404).send('el tablero no existe')
+   if(!BoardService.doesBoardExist(id)) return res.status(404).send('el tablero no existe')
    
    const cantIntentos = jugadas.filter(j => j.tablero === id).length
    const paresEncontrados = jugadas.filter(j => j.resultado && j.tablero === id)
