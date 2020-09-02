@@ -30,11 +30,12 @@ boardController.compareChips = (req,res) => {
    let id = req.params.tableroId
    
    if(!BoardService.doesBoardExist(id)) return res.status(404).send('el tablero no existe')
-   if(!BoardService.hasValidCoordinates(id, parseInt(ficha1[0]), parseInt(ficha1[1]))) return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 1')
-   if(!BoardService.hasValidCoordinates(id, parseInt(ficha2[0]), parseInt(ficha2[1]))) return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 2')
 
    if(!ficha1 || !ficha2) return res.status(400).send('se necesitan 2 fichas para poder comparar')
    if(ficha1[0] === ficha2[0] && ficha1[1] === ficha2[1]) return res.status(400).send('elija 2 fichas distinas')
+
+   if(!BoardService.hasValidCoordinates(id, parseInt(ficha1[0]), parseInt(ficha1[1]))) return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 1')
+   if(!BoardService.hasValidCoordinates(id, parseInt(ficha2[0]), parseInt(ficha2[1]))) return res.status(400).send('Por favor ingrese coordenadas válidas para ficha 2')
 
    const response = BoardService.compareChips(id, ficha1, ficha2)
    return res.status(201).send(response)
@@ -44,12 +45,10 @@ boardController.compareChips = (req,res) => {
 
 boardController.getGameStatus = (req,res) => {
    let id = req.params.tableroId
-   const ancho = tableros[id].ancho
-   const alto = tableros[id].alto 
    
    if(!BoardService.doesBoardExist(id)) return res.status(404).send('el tablero no existe')
    
-   const response = boardService.getGameStatus(id, alto, ancho)   
+   const response = BoardService.getGameStatus(id)   
    return res.status(200).send(response)
 }
 

@@ -75,8 +75,10 @@ boardService.compareChips = (id, ficha1, ficha2) => {
 
 
 
-boardService.getGameStatus = (id, alto,ancho) => {
-   let cantPares = (ancho * alto) / 2
+boardService.getGameStatus = (id) => {
+   let alto = tableros[id].alto
+   let ancho = tableros[id].ancho
+   let cantPares = (alto * ancho) / 2
    const cantIntentos = jugadas.filter(j => j.tablero === id).length
    const paresEncontrados = jugadas.filter(j => j.resultado && j.tablero === id)
    let estadoPartida = paresEncontrados.length === cantPares ? 'FINISHED' : 'PLAYING' 
