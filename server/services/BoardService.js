@@ -48,9 +48,45 @@ boardService.doesBoardExist = (id) => id < tableros.length
 
 boardService.hasValidCoordinates = (id, posX, posY) => posX < tableros[id].tablero.length && posY < tableros[id].tablero[0].length
 
+boardService.compareChips = (id, ficha1, ficha2) => {
+   const pares = tableros[id].tablero[ficha1[0]][ficha1[1]] === tableros[id].tablero[ficha2[0]][ficha2[1]]
+   
+   const ficha1B = {
+      'posX': ficha1[0],
+      'posY': ficha1[1],
+      'value': tableros[id].tablero[ficha1[0]][ficha1[1]]
+   }
 
-boardService.compareChips = () => {}
+   const ficha2B = {
+      'posX': ficha2[0],
+      'posY': ficha2[1],
+      'value': tableros[id].tablero[ficha2[0]][ficha2[1]]
+   }
 
-boardService.getGameStatus = () => {}
+   jugadas.push({
+      'tablero': id,
+      'ficha1': ficha1B,
+      'ficha2': ficha2B,
+      'resultado': pares
+   })
+
+   return jugadas[jugadas.length - 1]
+}
+
+
+
+boardService.getGameStatus = (id, alto,ancho) => {
+   let cantPares = (ancho * alto) / 2
+   const cantIntentos = jugadas.filter(j => j.tablero === id).length
+   const paresEncontrados = jugadas.filter(j => j.resultado && j.tablero === id)
+   let estadoPartida = paresEncontrados.length === cantPares ? 'FINISHED' : 'PLAYING' 
+
+   const respuesta = {
+      'status': estadoPartida, 
+      'attempts': cantIntentos
+   }
+
+   return (respuesta)
+}
 
 module.exports = boardService
