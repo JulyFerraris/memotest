@@ -13,7 +13,7 @@ class ArmarTablero extends React.Component {
 
    _onSubmit = (event) => {
       event.preventDefault();
-      this.props.formAction(this.state.filas, this.state.columnas);
+      this.props.formAction(this.state.columnas, this.state.filas);
    }
 
    _onChange = e => {

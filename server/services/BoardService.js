@@ -4,7 +4,7 @@ let fichas = [ 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','
 let tableros = []
 let jugadas = []
 
-boardService.requestBoard = (alto, ancho) => {
+boardService.requestBoard = (ancho, alto) => {
    let misFichas = [...fichas]
    let misFichasElegidas = []
    let miTablero = []

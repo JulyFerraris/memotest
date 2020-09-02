@@ -16,7 +16,7 @@ class TableroClient{
 		})
 		.then(response => response.json())
  		.then(resultado => this._updateState({ 
-         tablero: Array.from({ length: ancho }).map(i => Array.from({ length: alto })),
+         tablero: Array.from({ length: alto }).map(i => Array.from({ length: ancho })),
          tableroId: resultado.tableroId,
          status:'PLAYING',
          paresEncontrados: [],

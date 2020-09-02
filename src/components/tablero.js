@@ -70,17 +70,17 @@ class Tablero extends React.Component {
 		return <React.Fragment>
 			<div className="tablero">
 				{ 
-					this.state.tablero.map((row, x) => {
+					this.state.tablero.map((row, y) => {
 						return (
-							<div className="tablero-row" key={x} > 
+							<div className="tablero-row" key={y} > 
 								{ 
-									row.map( (card, y) => {
+									row.map( (card, x) => {
 										const cardLabel = this._flipCard(x, y)
 										const isVisible = !!cardLabel
 										const yaElegida = () => {}
 										return <Ficha 
 											cardLabel={cardLabel} 
-											key={y} 
+											key={x} 
 											isVisible={isVisible} 
 											coordenadas={ isVisible ? yaElegida : () => this._clickEnFicha(x, y)}
 										/>;		    						
