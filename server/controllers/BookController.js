@@ -33,7 +33,7 @@ bookController.showBook = (req,res) => {
 
 bookController.addBook = (req,res) => {
    let nombre_libro = req.body.name
-   if(!BookService.nameBookExist(nombre_libro)) return res.status(400).send("el campo name es requerido")
+   if(!nombre_libro) return res.status(400).send("el campo name es requerido")
    const response = BookService.addBook(nombre_libro)
    return res.status(201).send(response) 
 
@@ -49,7 +49,7 @@ bookController.editBook = (req,res) => {
    const id = req.params.id
    let nombre_libro = req.body.name
    if(!BookService.doesBookExist(id)) return res.status(404).send('No se puede modificar porque el libro no existe')
-   if(!BookService.nameBookExist(nombre_libro)) return res.status(400).send("el campo name es requerido")
+   if(!nombre_libro) return res.status(400).send("el campo name es requerido")
    const response = BookService.editBook(id, nombre_libro)
    return res.status(200).send(response) 
    
