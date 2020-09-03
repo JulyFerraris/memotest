@@ -18,7 +18,8 @@ class Tablero extends React.Component {
 			paresEncontrados: [],
 			posiblePar: [],
 			status:'START',
-			attempts: 0
+			attempts: 0,
+			mustCheckForVictory: false
 		};
 		this.setState = this.setState.bind(this)
 		let cliente = new TableroClient(this.setState)
@@ -33,7 +34,7 @@ class Tablero extends React.Component {
 			case 1:
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
 				this.tableroClient.compareChips(this.state.tableroId, this.state.posiblePar[0].posX, this.state.posiblePar[0].posY, coorX, coorY, this.state.paresEncontrados)
-				this.tableroClient.getGameStatus(this.state.tableroId)
+				//this.tableroClient.getGameStatus(this.state.tableroId)
 				break;
 			case 2:
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, [])
@@ -61,6 +62,13 @@ class Tablero extends React.Component {
 
 	_toMainMenu = () => {
 		this.setState({ status:'START'})
+	}
+
+	componentDidUpdate(prevProps) {
+		if(this.state.mustCheckForVictory){
+			this.setState({ mustCheckForVictory: false }, 
+				() => this.tableroClient.getGameStatus(this.state.tableroId))
+	  	}
 	}
 
 

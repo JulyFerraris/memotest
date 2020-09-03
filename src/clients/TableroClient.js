@@ -53,7 +53,8 @@ class TableroClient{
          console.log(response)
          if (response.resultado){
             this._updateState({
-               paresEncontrados: [...paresEncontrados, response.ficha1, response.ficha2]
+               paresEncontrados: [...paresEncontrados, response.ficha1, response.ficha2],
+               mustCheckForVictory: true
             })
          }
       })   
