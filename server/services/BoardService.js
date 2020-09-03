@@ -73,8 +73,6 @@ boardService.compareChips = (id, ficha1, ficha2) => {
    return jugadas[jugadas.length - 1]
 }
 
-
-
 boardService.getGameStatus = (id) => {
    let alto = tableros[id].alto
    let ancho = tableros[id].ancho
