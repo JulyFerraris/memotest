@@ -6,7 +6,7 @@ import Contador from '../components/contador'
 import Victoria from '../components/victoria'
 import TableroClient from '../clients/TableroClient'
 import ArmarTablero from '../components/armarTablero'
-
+import Error from '../components/error'
 
 class Tablero extends React.Component {
    
@@ -76,6 +76,7 @@ class Tablero extends React.Component {
 		if(this.state.status === 'START') return <ArmarTablero formAction={this.tableroClient.requestBoard} />
 		
 		return <React.Fragment>
+			<Error />
 			<div className="tablero">
 				{ 
 					this.state.tablero.map((row, y) => {
