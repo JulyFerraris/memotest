@@ -21,9 +21,18 @@ class TableroClient{
          status:'PLAYING',
          paresEncontrados: [],
 			posiblePar: [],
-			attempts: 0
+         attempts: 0,
+         error: null
 		}))
-		.catch(err => console.log(err))
+		.catch(err => {
+         console.log(err)
+         this._updateState({
+            error: {
+               description: "salio  todo mal ...",
+               options: [{'description': 'Reintentar', 'action': () => this.requestBoard(ancho,alto)}]
+            }
+         })
+      })
    }
 
 
@@ -32,7 +41,8 @@ class TableroClient{
       .then(response => response.json())
       .then(response => {
          this._updateState({
-            posiblePar: [...posiblePar, response]
+            posiblePar: [...posiblePar, response],
+            error: null
          })
       })
       .catch(err => console.log(err)) 
@@ -54,7 +64,8 @@ class TableroClient{
          if (response.resultado){
             this._updateState({
                paresEncontrados: [...paresEncontrados, response.ficha1, response.ficha2],
-               mustCheckForVictory: true
+               mustCheckForVictory: true,
+               error: null
             })
          }
       })   
@@ -68,7 +79,8 @@ class TableroClient{
       .then(response => {
          this._updateState({
             attempts: response.attempts,
-			   status: response.status
+            status: response.status,
+            error: null
          })
       })
       .catch(err => console.log(err)) 

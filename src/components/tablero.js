@@ -19,7 +19,8 @@ class Tablero extends React.Component {
 			posiblePar: [],
 			status:'START',
 			attempts: 0,
-			mustCheckForVictory: false
+			mustCheckForVictory: false,
+			error: null
 		};
 		this.setState = this.setState.bind(this)
 		let cliente = new TableroClient(this.setState)
@@ -73,15 +74,23 @@ class Tablero extends React.Component {
 
 
 	render(){
-		if(this.state.status === 'START') return <ArmarTablero formAction={this.tableroClient.requestBoard} />
+		if(this.state.status === 'START') {
+			return (
+				<React.Fragment>
+					<Error data={this.state.error} />
+			 		<ArmarTablero formAction={this.tableroClient.requestBoard} />
+				</React.Fragment>
+			)
+		}
 		
 		return <React.Fragment>
-			<Error />
 			<div className="tablero">
 				{ 
 					this.state.tablero.map((row, y) => {
 						return (
-							<div className="tablero-row" key={y} > 
+							<React.Fragment>
+								<Error data={this.state.error}  />
+								<div className="tablero-row" key={y} > 
 								{ 
 									row.map( (card, x) => {
 										const cardLabel = this._flipCard(x, y)
@@ -96,6 +105,7 @@ class Tablero extends React.Component {
 									})
 								}
 							</div>
+							</React.Fragment>
 						)
 					})
 				}
