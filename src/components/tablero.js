@@ -74,6 +74,7 @@ class Tablero extends React.Component {
 
 
 	render(){
+		console.log('xxxxxx',this.state)
 		if(this.state.status === 'START') {
 			return (
 				<React.Fragment>

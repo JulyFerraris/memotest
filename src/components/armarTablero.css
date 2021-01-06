@@ -16,8 +16,9 @@ fieldset {
    text-align: left;
 }
 input{
-   width: 120px;
+   width: 80px;
    height: 40px;
+   padding: 0 10px;
 }
 
 label {
@@ -28,4 +29,10 @@ label {
 button {
    line-height: 40px;
    padding: 0 30px;
+   margin-top: 18px;
+}
+
+form {
+   display: flex;
+   align-items: center;
 }

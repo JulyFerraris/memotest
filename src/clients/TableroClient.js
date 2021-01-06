@@ -4,26 +4,49 @@ class TableroClient{
       this._updateState = updateState
    }
 
+   
+
 
    requestBoard = (ancho, alto) => {
       const data = { ancho: ancho, alto: alto  } 
-		fetch('/api/tableros', {
+      let statusCode = 0
+      
+      fetch('/api/tableros', {
 			method: 'POST',
 			headers: {
 			 'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(data)
 		})
-		.then(response => response.json())
- 		.then(resultado => this._updateState({ 
-         tablero: Array.from({ length: alto }).map(i => Array.from({ length: ancho })),
-         tableroId: resultado.tableroId,
-         status:'PLAYING',
-         paresEncontrados: [],
-			posiblePar: [],
-         attempts: 0,
-         error: null
-		}))
+		.then(response => {
+         statusCode = response.status
+         return response.json()
+      })
+ 		.then(resultado => {
+         switch(statusCode){
+            case 201:
+               this._updateState({ 
+                  tablero: Array.from({ length: alto }).map(i => Array.from({ length: ancho })),
+                  tableroId: resultado.tableroId,
+                  status:'PLAYING',
+                  paresEncontrados: [],
+                  posiblePar: [],
+                  attempts: 0,
+                  error: null
+               })
+               break
+            case 400:
+               this._updateState({
+                  error: {
+                     ...resultado,
+                     options: resultado.options.map( i => {
+                        return {...i, 'action': () => this.requestBoard(i.values.width, i.values.height)}
+                     })
+                  }
+               })
+               break
+         } 
+		})
 		.catch(err => {
          console.log(err)
          this._updateState({

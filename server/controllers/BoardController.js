@@ -2,18 +2,30 @@ const BoardService = require('../services/BoardService')
 let boardController = {}
 
 
-/*boardController.requestBoard = (req,res) => {
+boardController.requestBoard = (req,res) => {
    let ancho = parseInt(req.body.ancho)
    let alto = parseInt(req.body.alto)
    if (!ancho || !alto) return res.status(400).send('El ancho y el alto son obligatorios')
-   if ((ancho * alto) % 2 === 1) return res.status(400).send('La grilla debe contener cantidad par de celdas, modifique el ancho o el alto')
+   //if ((ancho * alto) % 2 === 1) return res.status(400).send('La grilla debe contener cantidad par de celdas, modifique el ancho o el alto')
+   if ((ancho * alto) % 2 === 1) return res.status(400).send(
+      {
+         description: 'La grilla debe contener cantidad par de celdas',
+         options: [{
+            description: `${ancho}x${alto + 1} `,
+            values: { 'width': ancho, 'height': alto + 1 }
+         },{
+            description: ` ${ancho + 1}x${alto}`,
+            values: { 'width': ancho + 1, 'height': alto }
+         }]
+      }
+   )
    const response = BoardService.requestBoard(ancho,alto)
    return res.status(201).send(response)
-}*/
-
-boardController.requestBoard = (req,res) => {
-   return res.status(504).send("todo mal")
 }
+
+/*boardController.requestBoard = (req,res) => {
+   return res.status(504).send("todo mal")
+}*/
 
 boardController.getChipContent = (req,res) => {
    let posX = req.query.posX
