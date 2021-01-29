@@ -1,12 +1,15 @@
 
-const defaultPOSTHeaders = {
+
+const defaultPOSTReqData = {
    'method': 'POST',
-   'Content-Type': 'application/json'
+   'headers': {
+      'Content-Type': 'application/json'
+   }
 }
 
 class RestConnector {
-   _doRequest = (url, headers, body) => {
-      return fetch(url, headers, body)
+   _doRequest = (url, data) => {
+      return fetch(url, data)
       
       //manejo de errores
       .then(response => {
@@ -23,12 +26,13 @@ class RestConnector {
      })
    }
    
+
    _doGET = (url, headers) => {
-      return this._doRequest(url, headers, {})
+      return this._doRequest(url)
    }
 
    _doPOST = (url, headers, body) => {
-      return this._doRequest(url, {...defaultPOSTHeaders, headers}, body)
+      return this._doRequest(url, {...defaultPOSTReqData, body: body})
    }
 }
 

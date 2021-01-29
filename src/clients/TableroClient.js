@@ -30,7 +30,7 @@ class TableroClient {
       })*/
 
  		.then(resultado => {
-         switch(statusCode){
+         switch(resultado.statusCode){
             case 201:
                this._updateState({ 
                   tablero: Array.from({ length: alto }).map(i => Array.from({ length: ancho })),
