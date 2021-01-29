@@ -1,27 +1,34 @@
-class TableroClient{
+import RestConnector from './RestConnector'
+
+
+class TableroClient {
 
    constructor(updateState){
       this._updateState = updateState
+      this._connector = new RestConnector()
    }
-
-   
-
 
    requestBoard = (ancho, alto) => {
       const data = { ancho: ancho, alto: alto  } 
       let statusCode = 0
+      const url = '/api/tableros'
+      const body = JSON.stringify(data)
+
+      this._connector._doPOST(url,{},body)
       
-      fetch('/api/tableros', {
+     /* fetch('/api/tableros', {
 			method: 'POST',
 			headers: {
 			 'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(data)
-		})
+      })
+
 		.then(response => {
          statusCode = response.status
          return response.json()
-      })
+      })*/
+
  		.then(resultado => {
          switch(statusCode){
             case 201:
