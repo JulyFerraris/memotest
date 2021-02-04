@@ -7,7 +7,7 @@ const defaultPOSTReqData = {
    }
 }
 
-class ErrorLoco {
+class CustomError {
    constructor(statusCode, message, body){
       this.statusCode = statusCode
       this.message = message
@@ -29,12 +29,15 @@ class RestConnector {
       })
       .then(response => {
          if (!success){
-            throw new ErrorLoco(statusCode, "Hubo un problema con el pedido", response)
+            throw new CustomError(statusCode, "Hubo un problema con el pedido", response)
          }
          return {
             statusCode: statusCode,
             body: response
          }
+      })
+      .catch(err => {
+         throw new CustomError(statusCode, "Hubo un problema con la conexión", {})
       })
    }
    
