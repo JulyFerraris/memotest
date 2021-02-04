@@ -7,23 +7,35 @@ const defaultPOSTReqData = {
    }
 }
 
+class ErrorLoco {
+   constructor(statusCode, message, body){
+      this.statusCode = statusCode
+      this.message = message
+      this.body = body
+   }
+}
+
 class RestConnector {
    _doRequest = (url, data) => {
+      let statusCode = 0
+      let success = false
+
       return fetch(url, data)
-      
       //manejo de errores
       .then(response => {
-         if (!response.ok){
-            throw new Error("Hubo un problema con el pedido: (" + response.status + ")")
-         }
-         return response
+         statusCode = response.status
+         success = response.ok
+         return response.json()
       })
       .then(response => {
-         return {
-            statusCode: response.status,
-            body: response.json()
+         if (!success){
+            throw new ErrorLoco(statusCode, "Hubo un problema con el pedido", response)
          }
-     })
+         return {
+            statusCode: statusCode,
+            body: response
+         }
+      })
    }
    
 
@@ -35,5 +47,7 @@ class RestConnector {
       return this._doRequest(url, {...defaultPOSTReqData, body: body})
    }
 }
+
+
 
 export default RestConnector
