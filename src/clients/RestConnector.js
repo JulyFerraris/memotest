@@ -19,9 +19,8 @@ class RestConnector {
    _doRequest = (url, data) => {
       let statusCode = 0
       let success = false
-
       return fetch(url, data)
-      //manejo de errores
+
       .then(response => {
          statusCode = response.status
          success = response.ok
@@ -43,7 +42,7 @@ class RestConnector {
    
 
    _doGET = (url, headers) => {
-      return this._doRequest(url)
+      return this._doRequest(url, {})
    }
 
    _doPOST = (url, headers, body) => {

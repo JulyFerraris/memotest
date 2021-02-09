@@ -10,10 +10,8 @@ class TableroClient {
 
    requestBoard = (ancho, alto) => {
       const data = { ancho: ancho, alto: alto  } 
-      let statusCode = 0
       const url = '/api/tableros'
       const body = JSON.stringify(data)
-
       this._connector._doPOST(url,{},body)
       
  		.then(resultado => {
@@ -44,7 +42,7 @@ class TableroClient {
             case 504:
                this._updateState({
                   error: {
-                     description: "salio  todo mal ...",
+                     description: "salio todo mal ...",
                      options: [{'description': 'Reintentar', 'action': () => this.requestBoard(ancho,alto)}]
                   }
                })
@@ -55,11 +53,11 @@ class TableroClient {
 
 
    getChipContent = (tableroId, posX, posY, posiblePar) => {
-      fetch(`/api/tableros/${tableroId}?posX=${posX}&posY=${posY}`)
-      .then(response => response.json())
+      const url = `/api/tableros/${tableroId}?posX=${posX}&posY=${posY}`
+      this._connector._doGET(url,{})
       .then(response => {
          this._updateState({
-            posiblePar: [...posiblePar, response],
+            posiblePar: [...posiblePar, response.body],
             error: null
          })
       })
@@ -67,18 +65,16 @@ class TableroClient {
    }
 
 
+
    compareChips = (tableroId,posX1, posY1, posX2,posY2, paresEncontrados) => {
 		const data =  { 'ficha1': [posX1, posY1], 'ficha2': [posX2, posY2] }
-		fetch(`/api/tableros/${tableroId}`, {
-			method: 'POST',
-			headers: {
-			 'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		})
-      .then(response => response.json())
+      const url = `/api/tableros/${tableroId}`
+      const body = JSON.stringify(data)
+      this._connector._doPOST(url,{},body)
+      
       .then(response => { 
-         console.log(response)
+         console.log('response',response)
+
          if (response.resultado){
             this._updateState({
                paresEncontrados: [...paresEncontrados, response.ficha1, response.ficha2],
@@ -90,14 +86,38 @@ class TableroClient {
 		.catch(err => console.log(err))
    }
 
+   /*
+   compareChips = (tableroId,posX1, posY1, posX2,posY2, paresEncontrados) => {
+		const data =  { 'ficha1': [posX1, posY1], 'ficha2': [posX2, posY2] }
+		const url = `/api/tableros/${tableroId}`
+      const body = JSON.stringify(data)
+      
+      this._connector._doPOST(url,{},body)
+      
+     
+      .then(response => { 
+         console.log('response.resultado',response.resultado)
+         if(response.resultado){
+
+            this._updateState({
+               paresEncontrados: [...paresEncontrados, response.resultado.ficha1, response.resultado.ficha2],
+               mustCheckForVictory: true,
+               error: null
+            })
+         }
+      })   
+		.catch(err => console.log(err))
+   }*/
+
 
    getGameStatus = (tableroId) => {
-      fetch(`/api/tableros/${tableroId}/estado`)
-      .then(response => response.json())
+      const url = `/api/tableros/${tableroId}/estado`
+      this._connector._doRequest(url, {})
+
       .then(response => {
          this._updateState({
-            attempts: response.attempts,
-            status: response.status,
+            attempts: response.body.attempts,
+            status: response.body.status,
             error: null
          })
       })
