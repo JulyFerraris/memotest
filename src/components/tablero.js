@@ -1,7 +1,7 @@
 import React from 'react'
 import './tablero.css'
 
-import Ficha from '../components/ficha'
+//import Ficha from '../components/ficha'
 import Ficha2 from '../components/ficha2'
 import Contador from '../components/contador'
 import Victoria from '../components/victoria'
@@ -77,11 +77,11 @@ class Tablero extends React.Component {
 	render(){
 		console.log('xxxxxx',this.state)
 		
-		return <Ficha2 
+		{/* return <Ficha2 
 			cardLabel={"A"} 
 			isVisible={false} 
 			coordenadas={ () => this._clickEnFicha(0, 0)}
-		/>
+		/>*/}
 
 		if(this.state.status === 'START') {
 			return (
@@ -105,7 +105,7 @@ class Tablero extends React.Component {
 										const cardLabel = this._flipCard(x, y)
 										const isVisible = !!cardLabel
 										const yaElegida = () => {}
-										return <Ficha
+										return <Ficha2
 											cardLabel={cardLabel} 
 											key={x} 
 											isVisible={isVisible} 

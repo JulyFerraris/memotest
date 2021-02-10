@@ -1,16 +1,30 @@
 /* entire container, keeps perspective */
 .flip-container {
 	perspective: 1000px;
+	margin: 10px;
+	display: inline-block;
+}
+
+.ficha {
+	background-color: rebeccapurple;
+	color: white;
+	border-radius: 5px;
+	box-sizing: border-box;
+	display: inline-block;
+	font-weight: bold;
+	min-width: 55px;
+	padding: 20px;
+	cursor: pointer;
 }
 
 /* flip the pane when hovered */
-.flip-container:hover .flipper, .flip-container.hover .flipper {
+.flip-container.is-flipped .flipper {
    transform: rotateY(180deg);
 }
 
 .flip-container, .front, .back {
-	width: 70px;
-	height: 70px;
+	width: 55px;
+	height: 58px;
 }
 
 /* flip speed goes here */
@@ -37,4 +51,8 @@
 /* back, initially hidden pane */
 .back {
 	transform: rotateY(180deg);
+	background-color: white;
+	color: black;
+	cursor: default;
+	box-shadow: 0 0 3px #CCC;
 }
