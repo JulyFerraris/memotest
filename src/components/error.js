@@ -8,7 +8,7 @@ const Error = (props) => {
 
    return <div className="error shakeX ">
       <p>{props.data.description}</p>
-      { props.data.options.map((link, i) => <a href="#" onClick={link.action} key={i}>{link.description}</a>)}
+      { props.data.options.map((link, i) => <button type="button" onClick={link.action} key={i}>{link.description}</button>)}
    </div>
 }
 

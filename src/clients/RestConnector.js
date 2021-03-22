@@ -36,6 +36,9 @@ class RestConnector {
          }
       })
       .catch(err => {
+         if (err.statusCode) {
+            throw err
+         }
          throw new CustomError(statusCode, "Hubo un problema con la conexión", {})
       })
    }

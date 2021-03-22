@@ -35,7 +35,7 @@ class Tablero extends React.Component {
 			case 1:
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, this.state.posiblePar)
 				this.tableroClient.compareChips(this.state.tableroId, this.state.posiblePar[0].posX, this.state.posiblePar[0].posY, coorX, coorY, this.state.paresEncontrados)
-				//this.tableroClient.getGameStatus(this.state.tableroId)
+				this.tableroClient.getGameStatus(this.state.tableroId)
 				break;
 			case 2:
 				this.tableroClient.getChipContent(this.state.tableroId, coorX, coorY, [])
@@ -79,7 +79,7 @@ class Tablero extends React.Component {
 		if(this.state.status === 'START') {
 			return (
 				<React.Fragment>
-					<Error data={this.state.error} />
+					<Error data={this.state.error} key={Math.random()} />
 			 		<ArmarTablero formAction={this.tableroClient.requestBoard} />
 				</React.Fragment>
 			)
@@ -100,7 +100,7 @@ class Tablero extends React.Component {
 										const yaElegida = () => {}
 										return <Ficha
 											cardLabel={cardLabel} 
-											key={x} 
+											key={`${x}_${y}`} 
 											isVisible={isVisible} 
 											coordenadas={ isVisible ? yaElegida : () => this._clickEnFicha(x, y)}
 										/>;		    						

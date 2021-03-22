@@ -26,18 +26,10 @@ class Ficha extends React.Component {
 	}
   
   	render(){
-		  
-		{/* const active = this.props.isVisible ? 'ficha active front' : 'ficha back';*/}
-
 		return <div className="flip-container" ref={this._wrapperRef}>
 			<div className="flipper">
-				<div className="ficha front" onClick={this._cardClicked} > 
-					{/* {this.props.isVisible ? this.props.cardLabel : '?' }*/}
-					?
-				</div>
-				<div className="ficha back"  > 
-					{this.props.cardLabel}
-				</div>
+				<div className="ficha front" onClick={this._cardClicked}>?</div>
+				<div className="ficha back">{this.props.cardLabel}</div>
 			</div>
 		</div>
  	}

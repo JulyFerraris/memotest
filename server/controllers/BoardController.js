@@ -6,7 +6,6 @@ boardController.requestBoard = (req,res) => {
    let ancho = parseInt(req.body.ancho)
    let alto = parseInt(req.body.alto)
    if (!ancho || !alto) return res.status(400).send('El ancho y el alto son obligatorios')
-   //if ((ancho * alto) % 2 === 1) return res.status(400).send('La grilla debe contener cantidad par de celdas, modifique el ancho o el alto')
    if ((ancho * alto) % 2 === 1) return res.status(400).send(
       {
          description: 'La grilla debe contener cantidad par de celdas',
@@ -22,8 +21,8 @@ boardController.requestBoard = (req,res) => {
    const response = BoardService.requestBoard(ancho,alto)
    return res.status(201).send(response)
 }
-
-/*boardController.requestBoard = (req,res) => {
+/*
+boardController.requestBoard = (req,res) => {
    return res.status(504).send("todo mal")
 }*/
 
