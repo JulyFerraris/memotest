@@ -90,7 +90,7 @@ class Tablero extends React.Component {
 				{ 
 					this.state.tablero.map((row, y) => {
 						return (
-							<React.Fragment>
+							<React.Fragment key={y}>
 								<Error data={this.state.error}  />
 								<div className="tablero-row" key={y} > 
 								{ 
