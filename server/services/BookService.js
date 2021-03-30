@@ -17,8 +17,8 @@ bookService.searchBook = (bookName) => {
    //   return i
    //})
 
-   if(!bookName) return BookModel.find({}).lean()
-   return BookModel.find({name: {$regex: bookName, $options: 'i'}}).lean()
+   if(!bookName) return BookModel.find({}).select('id name - _id').lean()
+   return BookModel.find({name: {$regex: bookName, $options: 'i'}}).select('id name - _id').lean()
 }
 
 bookService.showBook = (id) => {
