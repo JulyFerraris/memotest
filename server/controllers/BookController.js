@@ -6,11 +6,19 @@ let libros = [{ 'id': 0, 'name': 'Dracula'},{ 'id': 1, 'name': '1984'} ]
 
 bookController.searchBook = (req,res) => {
    const nombre_libro = req.query.name
+   BookService.searchBook(nombre_libro).then(response => {
+      return res.status(200).send(response)
+   }).catch(err => {
+      return res.status(404).send(`No se encontraron libros llamados "` + nombre_libro + `"`)
+   })
+   
+   /*
+   
    const response = BookService.searchBook(nombre_libro)
    if(response == "") return res.status(404).send(`No encontramos libros llamados "`+ nombre_libro + `"`)
    return res.status(200).send(response)
 
-   /*
+   
    const libros_filtrados = nombre_libro ? libros.filter(i => i.name.startsWith(nombre_libro)) : libros
    if(libros_filtrados === "") return res.status(404).send('El libro no existe')
    return res.status(200).send(libros_filtrados) */
